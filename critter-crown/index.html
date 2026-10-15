@@ -2,14 +2,14 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Critter Crown">
-<meta name="theme-color" content="#3b2a1a"><meta name="cc-version" content="CC-v3"><title>Critter Crown</title>
+<meta name="theme-color" content="#3b2a1a"><meta name="cc-version" content="CC-v4"><title>Critter Crown</title>
 <link rel="apple-touch-icon" href="../icons/icon-180.png"><link rel="icon" href="../icons/icon-192.png"><link rel="manifest" href="../manifest.json">
 <style>:root{--sat:env(safe-area-inset-top);--sab:env(safe-area-inset-bottom)}
 html,body{margin:0;height:100%;overflow:hidden;background:#2a1d10;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;overscroll-behavior:none;-webkit-tap-highlight-color:transparent}
 canvas{display:block;position:fixed;inset:0;width:100vw;height:100vh;height:100dvh}</style></head><body><canvas id="c"></canvas><script>
 (()=>{
 'use strict';
-const VERSION='CC-v3';
+const VERSION='CC-v4';
 // ===== data =====
 const EL={fire:{n:'Fire',c:'#e8553a',d:'#8a2412',l:'#ffc49a',bg:['#ffdcb0','#f08a4a'],pal:['#e8553a','#f08a2c','#d8413f']},
  water:{n:'Water',c:'#3a8be8',d:'#163f7a',l:'#bfe0ff',bg:['#d4f0ff','#5aa8e8'],pal:['#3a8be8','#3ab5c8','#5a7ae8']},
@@ -387,7 +387,13 @@ function drawHub(){bgRays('#f6e3b4','#d39a5a',W/2,H*.33,.05);topBar();
  const mc=S.daily&&(S.daily.m.some(m=>m.p>=m.n&&!m.claimed)||!S.daily.gift);
  button('TEAM',20*U,y0+148*U,hw,52*U,()=>{scr.team=0;go('team')},'#9c6a12',18);button('MISSIONS',32*U+hw,y0+148*U,hw,52*U,()=>go('missions'),'#3a8be8',17,{pulse:mc});
  if(mc){x.fillStyle='#c8452f';x.beginPath();x.arc(20*U+bw-6*U,y0+150*U,9*U,0,7);x.fill();T('!',20*U+bw-6*U,y0+150*U,12,'#fff')}
+ const ry=Math.min(H-56*U,y0+214*U);button('⟲ Reset progress',W/2-80*U,ry,160*U,36*U,()=>{modal={t:'reset'};sfx.click()},'#7a5a3a',12);
+ if(modal&&modal.t==='reset')drawResetModal();
 }
+function drawResetModal(){x.fillStyle='rgba(20,12,5,.7)';x.fillRect(0,0,W,H);btns.push({x:0,y:0,w:W,h:H,k:'rbg',f:()=>{modal=null}});const pw=W-40*U,ph=230*U,px=20*U,py=(H-ph)/2;panel(px,py,pw,ph);btns.push({x:px,y:py,w:pw,h:ph,k:'rpan',f:()=>{}});
+ pix('RESET PROGRESS?',W/2,py+34*U,Math.min(18,(pw-30*U)/(15*U)/1.25),'#c8452f',2);T('This deletes all cards, coins,',W/2,py+76*U,14,pal.ink||'#3b2a1a');T('and campaign progress.',W/2,py+98*U,14,pal.ink||'#3b2a1a');T('This cannot be undone.',W/2,py+124*U,12,'#c8452f');
+ const bw=(pw-48*U)/2,by=py+ph-66*U;button('CANCEL',px+16*U,by,bw,48*U,()=>{modal=null;sfx.click()},'#2f9e6b',16);button('DELETE ALL',px+32*U+bw,by,bw,48*U,resetProgress,'#c8452f',15)}
+function resetProgress(){try{localStorage.removeItem(KEY)}catch(e){}S=JSON.parse(JSON.stringify(DEF));modal=null;P=null;B=null;detail=null;introStep=0;cardCache.clear();scene='intro';vib(20)}
 const hintShop=()=>S.onb===2;
 function fmtT(ms){ms=Math.max(0,ms);const h=Math.floor(ms/3600e3),m=Math.floor(ms%3600e3/60e3),s=Math.floor(ms%60e3/1e3);return h?h+'h '+m+'m':m+'m '+s+'s'}
 // ===== shop =====
@@ -621,6 +627,6 @@ rs();if(S.onb===0)scene='intro';else{ensureTeam();scene='hub'}requestAnimationFr
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)rollDaily()});
 window.__cc={VERSION,ART,CARDS,STAGES,PACKS,get S(){return S},get scene(){return scene},get P(){return P},get B(){return B},save,simBattle,startBattle,openPack:(i,m)=>openPack(PACKS[i||0],m),packTap,doTear,go:s=>{scene=s},speed:n=>speedMul=n,
  setDetail:id=>{detail={c:CARDS[id],t:1};tilt={x:.5,y:.2,src:'drag'};scene='detail'},buy:i=>{const pk=PACKS[i];if(S.coins<pk.price)return null;S.coins-=pk.price;return rollPack(pk)},upgradeTeam:()=>{let n=0;for(const id of S.team){const c=CARDS[id],cd=S.cards[id];while(cd.lvl<10&&S.dust>=upCost(c,cd.lvl)){S.dust-=upCost(c,cd.lvl);cd.lvl++;n++}}cardCache.clear();save();return n},
- bestTeam:()=>{S.team=bestTeam();save()},modal:i=>{modal={t:'stage',i}},scroll:(s,v)=>{scr[s]=v}};
+ bestTeam:()=>{S.team=bestTeam();save()},modal:i=>{modal={t:'stage',i}},get modal(){return modal},get btns(){return btns},resetProgress,openReset:()=>{modal={t:'reset'}},cancelReset:()=>{modal=null},scroll:(s,v)=>{scr[s]=v}};
 })();
 </script><script>if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('../sw.js',{scope:'../'}).catch(()=>{});</script></body></html>
