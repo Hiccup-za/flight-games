@@ -1,0 +1,36 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Flight Games">
+<meta name="theme-color" content="#3b2a1a"><title>Flight Games</title>
+<link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icons/icon-180.png"><link rel="icon" href="icons/icon-192.png">
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:"Courier New",Courier,monospace;color:#3b2a1a;background:#2a1d10 radial-gradient(circle at 50% 0,#e9c27f 0,#c9955a 40%,#2a1d10 100%);padding:max(20px,env(safe-area-inset-top)) 16px 30px}
+.wrap{max-width:440px;margin:0 auto}h1{text-align:center;font-size:40px;margin:10px 0 2px;color:#ffd23f;text-shadow:3px 3px 0 #3b2a1a,-2px -2px 0 #3b2a1a,2px -2px 0 #3b2a1a,-2px 2px 0 #3b2a1a;letter-spacing:2px}
+.sub{text-align:center;color:#fff3c4;font-weight:bold;margin-bottom:16px;text-shadow:1px 1px 0 #3b2a1a}
+#st{margin:0 auto 18px;width:fit-content;padding:8px 16px;border:3px solid #3b2a1a;border-radius:20px;background:#e9d3a0;font-weight:bold}#st.ok{background:#bfe3b0;color:#1f5a33}
+a.g{display:flex;gap:14px;align-items:center;text-decoration:none;color:#3b2a1a;background:#f3e2b8;border:4px solid #3b2a1a;border-radius:16px;padding:14px;margin-bottom:14px;box-shadow:0 6px 0 #3b2a1a}
+a.g:active{transform:translateY(4px);box-shadow:0 2px 0 #3b2a1a}.ic{width:70px;height:70px;flex:none;border:3px solid #3b2a1a;border-radius:12px}
+.g b{font-size:21px;display:block}.g span{font-size:13px}.play{margin-left:auto;background:#c8452f;color:#fff3c4;border:3px solid #3b2a1a;border-radius:10px;padding:8px 10px;font-weight:bold}
+.how{background:#f3e2b8;border:4px solid #3b2a1a;border-radius:16px;padding:12px 16px;font-size:14px;line-height:1.45}.how h2{margin:4px 0 6px;font-size:18px}.how ol{padding-left:20px;margin:6px 0}
+</style></head><body><div class="wrap">
+<h1>FLIGHT GAMES</h1><div class="sub">♛ two royal games for the skies ♛</div>
+<div id="st">⏳ Preparing offline mode…</div>
+<a class="g" href="coin-dash/"><canvas class="ic" id="i1" width="140" height="140"></canvas><div><b>Coin Dash</b><span>3-world runner · boss · endless</span></div><div class="play">PLAY</div></a>
+<a class="g" href="crown-survivors/"><canvas class="ic" id="i2" width="140" height="140"></canvas><div><b>Crown Survivors</b><span>horde survival · builds · bosses</span></div><div class="play">PLAY</div></a>
+<div class="how"><h2>✈️ Before you board</h2><ol>
+<li>Open this page while online and wait for <b>Ready for offline ✓</b>.</li>
+<li>Open each game once (tap it, then come back).</li>
+<li><b>iPhone (Safari):</b> Share → <b>Add to Home Screen</b>. <b>Android (Chrome):</b> ⋮ → <b>Add to Home screen</b> / Install.</li>
+<li>In airplane mode, launch from the home-screen icon and play. Progress saves on your phone.</li></ol></div>
+</div>
+<script>
+function draw(id,bg,f){const x=document.getElementById(id).getContext('2d');x.fillStyle=bg;x.fillRect(0,0,140,140);f(x)}
+function hero(x,cx,cy,s,c){x.fillStyle='#3b2a1a';x.fillRect(cx-22*s,cy-20*s,44*s,42*s);x.fillStyle=c;x.fillRect(cx-19*s,cy-17*s,38*s,36*s);x.fillStyle='#3b2a1a';x.fillRect(cx-10*s,cy-7*s,6*s,9*s);x.fillRect(cx+5*s,cy-7*s,6*s,9*s);x.fillStyle='#ffd23f';x.beginPath();x.moveTo(cx-17*s,cy-19*s);x.lineTo(cx-18*s,cy-36*s);x.lineTo(cx-8*s,cy-27*s);x.lineTo(cx,cy-40*s);x.lineTo(cx+8*s,cy-27*s);x.lineTo(cx+18*s,cy-36*s);x.lineTo(cx+17*s,cy-19*s);x.fill()}
+draw('i1','#f6e3b4',x=>{x.fillStyle='#8b5a2b';x.fillRect(0,108,140,32);hero(x,55,82,1,'#e0a526');x.fillStyle='#e0a526';x.fillRect(92,30,30,30);x.fillStyle='#fff3c4';x.font='bold 24px monospace';x.fillText('?',100,53)});
+draw('i2','#4b4766',x=>{x.fillStyle='#c8452f';[[18,22],[110,30],[20,110],[115,112]].forEach(([a,b])=>{x.beginPath();x.arc(a,b,11,0,7);x.fill()});x.strokeStyle='#ffd23f';x.lineWidth=3;x.beginPath();x.arc(70,78,46,0,7);x.stroke();hero(x,70,80,1,'#e0a526')});
+const st=document.getElementById('st');function ready(){st.textContent='Ready for offline ✓';st.className='ok'}
+if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js',{scope:'./'}).then(()=>navigator.serviceWorker.ready).then(r=>{
+ navigator.serviceWorker.addEventListener('message',e=>{if(e.data&&e.data.ready)ready()});const ask=()=>{const w=navigator.serviceWorker.controller||r.active;if(w)w.postMessage('status')};ask();setInterval(ask,1500)}).catch(e=>{st.textContent='⚠ Offline mode unavailable: '+e.message})}
+else st.textContent='⚠ This browser cannot cache for offline';
+</script></body></html>
