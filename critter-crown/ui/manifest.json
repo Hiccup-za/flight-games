@@ -1,0 +1,16 @@
+{
+ "frame-0": "frame-common.webp",
+ "frame-1": "frame-uncommon.webp",
+ "frame-2": "frame-rare.webp",
+ "frame-3": "frame-epic.webp",
+ "frame-4": "frame-legendary.webp",
+ "back": "card-back.webp",
+ "prof": "professor-crown.webp",
+ "trainer-meadow": "trainer-meadow.webp",
+ "trainer-coast": "trainer-coast.webp",
+ "trainer-peaks": "trainer-peaks.webp",
+ "trainer-castle": "trainer-castle.webp",
+ "shop": "shop-panel.webp",
+ "seal": "pack-seal.webp",
+ "hubbtn": "hub-buttons.webp"
+}
