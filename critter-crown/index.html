@@ -2,14 +2,14 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Critter Crown">
-<meta name="theme-color" content="#3b2a1a"><meta name="cc-version" content="CC-v4"><title>Critter Crown</title>
+<meta name="theme-color" content="#3b2a1a"><meta name="cc-version" content="CC-v5"><title>Critter Crown</title>
 <link rel="apple-touch-icon" href="../icons/icon-180.png"><link rel="icon" href="../icons/icon-192.png"><link rel="manifest" href="../manifest.json">
 <style>:root{--sat:env(safe-area-inset-top);--sab:env(safe-area-inset-bottom)}
 html,body{margin:0;height:100%;overflow:hidden;background:#2a1d10;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;overscroll-behavior:none;-webkit-tap-highlight-color:transparent}
 canvas{display:block;position:fixed;inset:0;width:100vw;height:100vh;height:100dvh}</style></head><body><canvas id="c"></canvas><script>
 (()=>{
 'use strict';
-const VERSION='CC-v4';
+const VERSION='CC-v5';
 // ===== data =====
 const EL={fire:{n:'Fire',c:'#e8553a',d:'#8a2412',l:'#ffc49a',bg:['#ffdcb0','#f08a4a'],pal:['#e8553a','#f08a2c','#d8413f']},
  water:{n:'Water',c:'#3a8be8',d:'#163f7a',l:'#bfe0ff',bg:['#d4f0ff','#5aa8e8'],pal:['#3a8be8','#3ab5c8','#5a7ae8']},
@@ -397,10 +397,15 @@ function resetProgress(){try{localStorage.removeItem(KEY)}catch(e){}S=JSON.parse
 const hintShop=()=>S.onb===2;
 function fmtT(ms){ms=Math.max(0,ms);const h=Math.floor(ms/3600e3),m=Math.floor(ms%3600e3/60e3),s=Math.floor(ms%60e3/1e3);return h?h+'h '+m+'m':m+'m '+s+'s'}
 // ===== shop =====
+const PACKCROP={'pack-fire-water':[80,22,319,368],'pack-grass-volt':[48,9,336,371],'pack-royal':[88,27,302,354]};
 function packArt(pk,X,Y,w,t,tear=0,wob=0){const h=w*1.5,k=w/100;x.save();x.translate(X+w/2,Y+h/2);x.rotate(Math.sin(t*2)*.02*wob);x.translate(-w/2,-h/2);
  x.fillStyle='rgba(0,0,0,.3)';rrp(x,4*k,6*k,w,h,6*k);x.fill();
- const im=artNamed(pk.art);const body=()=>{x.beginPath();x.moveTo(0,8*k);for(let i=0;i<=10;i++)x.lineTo(i*w/10,(i%2?3:8)*k);x.lineTo(w,h-8*k);for(let i=10;i>=0;i--)x.lineTo(i*w/10,h-(i%2?3:8)*k);x.closePath()};
- if(im){body();x.save();x.clip();x.drawImage(im,0,0,w,h);x.restore();x.lineWidth=3*k;x.strokeStyle=pal.ink;body();x.stroke();
+ const im=artNamed(pk.art);const body=()=>{x.beginPath();x.moveTo(0,5*k);for(let i=0;i<=16;i++)x.lineTo(i*w/16,(i%2?0:5)*k);x.lineTo(w,h-5*k);for(let i=16;i>=0;i--)x.lineTo(i*w/16,h-(i%2?0:5)*k);x.closePath()};
+ if(im){const cr=PACKCROP[pk.art]||[0,0,384,384],sc=im.naturalWidth/384;body();x.save();x.clip();x.fillStyle='#b8902e';x.fillRect(0,0,w,h);x.drawImage(im,cr[0]*sc,cr[1]*sc,(cr[2]-cr[0])*sc,(cr[3]-cr[1])*sc,-2*k,-2*k,w+4*k,h+4*k);
+  // foil crimp bands top/bottom + thick side seams
+  for(const [y0,y1] of [[0,13*k],[h-13*k,h]]){const g=x.createLinearGradient(0,y0,0,y1);g.addColorStop(0,'rgba(255,240,180,.55)');g.addColorStop(.5,'rgba(120,80,20,.35)');g.addColorStop(1,'rgba(255,240,180,.45)');x.fillStyle=g;x.fillRect(0,y0,w,y1-y0);x.strokeStyle='rgba(80,50,10,.45)';x.lineWidth=1*k;for(let i=1;i<25;i++){x.beginPath();x.moveTo(i*w/25,y0+2*k);x.lineTo(i*w/25,y1-2*k);x.stroke()}}
+  for(const [sx,d] of [[0,1],[w,-1]]){const g=x.createLinearGradient(sx,0,sx+d*9*k,0);g.addColorStop(0,'rgba(60,35,5,.65)');g.addColorStop(.45,'rgba(255,235,160,.45)');g.addColorStop(1,'rgba(255,235,160,0)');x.fillStyle=g;x.fillRect(d>0?0:w-9*k,0,9*k,h)}
+  x.restore();x.lineWidth=2.5*k;x.strokeStyle=pal.ink;body();x.stroke();
   // shine sweep
   x.save();body();x.clip();const sh=((t*.4)%1.6-.3)*w*1.6;const sg=x.createLinearGradient(sh-w*.3,0,sh+w*.3,h);sg.addColorStop(0,'rgba(255,255,255,0)');sg.addColorStop(.5,'rgba(255,255,255,.28)');sg.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=sg;x.fillRect(0,0,w,h);x.restore()}
  else{const g=x.createLinearGradient(0,0,w,h);g.addColorStop(0,shade(pk.col,50));g.addColorStop(.5,pk.col);g.addColorStop(1,pk.col2);body();x.fillStyle=g;x.fill();x.lineWidth=3*k;x.strokeStyle=pal.ink;x.stroke();drawMon(CARDS[pk.mascot],w/2,h*.46,k*1.05,t,x)}
@@ -410,15 +415,15 @@ function packArt(pk,X,Y,w,t,tear=0,wob=0){const h=w*1.5,k=w/100;x.save();x.trans
 
 function drawShop(){bgRays('#e9d3ff','#6a5acd',W/2,H*.4,.06);topBar(()=>go('hub'));pix('PACK SHOP',W/2,SAT+80*U,24,pal.gold,2);
  const fr=freeReady();button(fr?'🎁 OPEN FREE PACK':'Free pack in '+fmtT(S.freeAt-Date.now()),20*U,SAT+104*U,W-40*U,46*U,claimFree,'#5fae7a',16,{dis:!fr,pulse:fr,tapDis:()=>say('Free pack every 4 hours')});
- const top=SAT+166*U,pw=Math.min(118*U,(W-48*U)/3*1.0);const gap=(W-pw*3)/4;
+ const top=SAT+166*U,pw=Math.min(124*U,(W-32*U)/3);const gap=(W-pw*3)/4;
  PACKS.forEach((pk,i)=>{const X=gap+i*(pw+gap),Y=top+(i===1?0:10*U)+Math.sin(clock*2+i)*3*U;packArt(pk,X,Y,pw,clock+i,0,1);
-  T(pk.d,X+pw/2,top+pw*1.5+26*U,9,pal.paper,'center',3);button(''+pk.price,X,top+pw*1.5+40*U,pw,40*U,()=>buyPack(pk),pk.royal?'#b07a10':'#c8452f',16,{dis:S.coins<pk.price,tapDis:()=>say('Need '+(pk.price-S.coins)+' more coins'),icon:(cx,cy)=>coinI(cx,cy,7*U)});
+  T(pk.d,X+pw/2,top+pw*1.5+26*U,Math.max(6.5,Math.min(9,pw/U/(pk.d.length*.56))),pal.paper,'center',3);button(''+pk.price,X,top+pw*1.5+40*U,pw,40*U,()=>buyPack(pk),pk.royal?'#b07a10':'#c8452f',16,{dis:S.coins<pk.price,tapDis:()=>say('Need '+(pk.price-S.coins)+' more coins'),icon:(cx,cy)=>coinI(cx,cy,7*U)});
   btns.push({x:X,y:Y,w:pw,h:pw*1.5,k:'pk'+i,f:()=>buyPack(pk)})});
  const y2=top+pw*1.5+96*U;panel(16*U,y2,W-32*U,Math.min(150*U,H-y2-SAB-14*U));T('PULL RATES (last card)',W/2,y2+22*U,12,pal.ink);
  [['Rare','72%',2],['Epic','22%',3],['Legendary','6%',4]].forEach(([n,p,r],i)=>{gemsR(r,46*U,y2+48*U+i*22*U,6*U);T(n,90*U,y2+48*U+i*22*U,12,RAR[r].c==='#ffc21f'?'#b07a10':RAR[r].c,'left',0);T(p,W-40*U,y2+48*U+i*22*U,12,pal.ink,'right')});
  T('Holo chance 7% per card · Royal: 20%',W/2,y2+118*U,10,'#7a6a50')}
 // ===== pack opening =====
-function packLayout(){const pw=Math.min(210*U,W*.58);return{pw,px:(W-pw)/2,py:H*.5-pw*.75}}
+function packLayout(){const pw=Math.min(240*U,W*.66,(H-SAT-SAB-230*U)/1.5);return{pw,px:(W-pw)/2,py:H*.48-pw*.75}}
 function drawPack(){const p=P;const L=packLayout();bgRays('#3b2416','#120a05',W/2,H*.45,p.phase==='stack'?.12:.04);
  const cur=p.res[p.idx];const gcol=p.phase==='stack'&&cur&&cur.c.r>=2?RAR[cur.c.r].c:'#ffd23f';
  if(p.phase==='stack'&&(p.revealed||p.flipping)&&cur&&cur.c.r>=2){const gg=x.createRadialGradient(W/2,H*.48,10,W/2,H*.48,W*.55);gg.addColorStop(0,rgba(gcol,.3));gg.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=gg;x.fillRect(0,0,W,H)}
@@ -625,7 +630,7 @@ function draw(){btns=[];x.save();if(shake)x.translate((Math.random()-.5)*shake*U
 let t0=performance.now();function loop(t){const dt=Math.max(0,Math.min(.05,(t-t0)/1000));t0=t;update(dt);draw();requestAnimationFrame(loop)}
 rs();if(S.onb===0)scene='intro';else{ensureTeam();scene='hub'}requestAnimationFrame(loop);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)rollDaily()});
-window.__cc={VERSION,ART,CARDS,STAGES,PACKS,get S(){return S},get scene(){return scene},get P(){return P},get B(){return B},save,simBattle,startBattle,openPack:(i,m)=>openPack(PACKS[i||0],m),packTap,doTear,go:s=>{scene=s},speed:n=>speedMul=n,
+window.__cc={VERSION,ART,CARDS,STAGES,PACKS,get S(){return S},get scene(){return scene},get P(){return P},get B(){return B},save,simBattle,startBattle,openPack:(i,m)=>openPack(PACKS[i||0],m),packTap,doTear,go:s=>{scene=s},speed:n=>speedMul=n,packL:()=>packLayout(),
  setDetail:id=>{detail={c:CARDS[id],t:1};tilt={x:.5,y:.2,src:'drag'};scene='detail'},buy:i=>{const pk=PACKS[i];if(S.coins<pk.price)return null;S.coins-=pk.price;return rollPack(pk)},upgradeTeam:()=>{let n=0;for(const id of S.team){const c=CARDS[id],cd=S.cards[id];while(cd.lvl<10&&S.dust>=upCost(c,cd.lvl)){S.dust-=upCost(c,cd.lvl);cd.lvl++;n++}}cardCache.clear();save();return n},
  bestTeam:()=>{S.team=bestTeam();save()},modal:i=>{modal={t:'stage',i}},get modal(){return modal},get btns(){return btns},resetProgress,openReset:()=>{modal={t:'reset'}},cancelReset:()=>{modal=null},scroll:(s,v)=>{scr[s]=v}};
 })();
