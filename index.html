@@ -14,10 +14,11 @@ a.g:active{transform:translateY(4px);box-shadow:0 2px 0 #3b2a1a}.ic{width:70px;h
 .g b{font-size:21px;display:block}.g span{font-size:13px}.play{margin-left:auto;background:#c8452f;color:#fff3c4;border:3px solid #3b2a1a;border-radius:10px;padding:8px 10px;font-weight:bold}
 .how{background:#f3e2b8;border:4px solid #3b2a1a;border-radius:16px;padding:12px 16px;font-size:14px;line-height:1.45}.how h2{margin:4px 0 6px;font-size:18px}.how ol{padding-left:20px;margin:6px 0}
 </style></head><body><div class="wrap">
-<h1>FLIGHT GAMES</h1><div class="sub">♛ two royal games for the skies ♛</div>
+<h1>FLIGHT GAMES</h1><div class="sub">♛ three royal games for the skies ♛</div>
 <div id="st">⏳ Preparing offline mode…</div>
 <a class="g" href="coin-dash/"><canvas class="ic" id="i1" width="140" height="140"></canvas><div><b>Coin Dash</b><span>3-world runner · boss · endless</span></div><div class="play">PLAY</div></a>
 <a class="g" href="crown-survivors/"><canvas class="ic" id="i2" width="140" height="140"></canvas><div><b>Crown Survivors</b><span>horde survival · builds · bosses</span></div><div class="play">PLAY</div></a>
+<a class="g" href="critter-crown/"><canvas class="ic" id="i3" width="140" height="140"></canvas><div><b>Critter Crown</b><span>collect cards · open packs · battle</span></div><div class="play">PLAY</div></a>
 <div class="how"><h2>✈️ Before you board</h2><ol>
 <li>Open this page while online and wait for <b>Ready for offline ✓</b>.</li>
 <li>Open each game once (tap it, then come back).</li>
@@ -29,6 +30,7 @@ function draw(id,bg,f){const x=document.getElementById(id).getContext('2d');x.fi
 function hero(x,cx,cy,s,c){x.fillStyle='#3b2a1a';x.fillRect(cx-22*s,cy-20*s,44*s,42*s);x.fillStyle=c;x.fillRect(cx-19*s,cy-17*s,38*s,36*s);x.fillStyle='#3b2a1a';x.fillRect(cx-10*s,cy-7*s,6*s,9*s);x.fillRect(cx+5*s,cy-7*s,6*s,9*s);x.fillStyle='#ffd23f';x.beginPath();x.moveTo(cx-17*s,cy-19*s);x.lineTo(cx-18*s,cy-36*s);x.lineTo(cx-8*s,cy-27*s);x.lineTo(cx,cy-40*s);x.lineTo(cx+8*s,cy-27*s);x.lineTo(cx+18*s,cy-36*s);x.lineTo(cx+17*s,cy-19*s);x.fill()}
 draw('i1','#f6e3b4',x=>{x.fillStyle='#8b5a2b';x.fillRect(0,108,140,32);hero(x,55,82,1,'#e0a526');x.fillStyle='#e0a526';x.fillRect(92,30,30,30);x.fillStyle='#fff3c4';x.font='bold 24px monospace';x.fillText('?',100,53)});
 draw('i2','#4b4766',x=>{x.fillStyle='#c8452f';[[18,22],[110,30],[20,110],[115,112]].forEach(([a,b])=>{x.beginPath();x.arc(a,b,11,0,7);x.fill()});x.strokeStyle='#ffd23f';x.lineWidth=3;x.beginPath();x.arc(70,78,46,0,7);x.stroke();hero(x,70,80,1,'#e0a526')});
+draw('i3','#3b2416',x=>{x.save();x.translate(70,70);x.rotate(-.15);x.fillStyle='#3b2a1a';x.fillRect(-36,-50,72,100);x.fillStyle='#ffd23f';x.fillRect(-33,-47,66,94);x.fillStyle='#f6ead0';x.fillRect(-28,-42,56,84);x.fillStyle='#f08a4a';x.fillRect(-25,-36,50,40);x.fillStyle='#e8553a';x.beginPath();x.arc(0,-14,15,0,7);x.fill();x.fillStyle='#fff';x.fillRect(-8,-18,6,7);x.fillRect(3,-18,6,7);x.fillStyle='#3b2a1a';x.fillRect(-6,-16,3,4);x.fillRect(5,-16,3,4);x.fillStyle='#c8452f';x.fillRect(-25,10,50,6);x.fillStyle='#3b2a1a';x.fillRect(-22,22,30,4);x.fillRect(-22,30,20,4);x.restore()});
 const st=document.getElementById('st');function ready(){st.textContent='Ready for offline ✓';st.className='ok'}
 if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js',{scope:'./'}).then(()=>navigator.serviceWorker.ready).then(r=>{
  navigator.serviceWorker.addEventListener('message',e=>{if(e.data&&e.data.ready)ready()});const ask=()=>{const w=navigator.serviceWorker.controller||r.active;if(w)w.postMessage('status')};ask();setInterval(ask,1500)}).catch(e=>{st.textContent='⚠ Offline mode unavailable: '+e.message})}

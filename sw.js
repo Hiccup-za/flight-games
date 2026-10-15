@@ -1,5 +1,5 @@
-const CACHE='flight-games-v2';
-const FILES=['./','./index.html','./manifest.json','./icons/icon-180.png','./icons/icon-192.png','./icons/icon-512.png','./coin-dash/','./coin-dash/index.html','./crown-survivors/','./crown-survivors/index.html'];
+const CACHE='flight-games-v3';
+const FILES=['./','./index.html','./manifest.json','./icons/icon-180.png','./icons/icon-192.png','./icons/icon-512.png','./coin-dash/','./coin-dash/index.html','./crown-survivors/','./crown-survivors/index.html','./critter-crown/','./critter-crown/index.html'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(FILES)).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
 self.addEventListener('message',e=>{if(e.data==='status')caches.open(CACHE).then(async c=>{const ok=(await Promise.all(FILES.map(f=>c.match(f)))).every(Boolean);e.source.postMessage({ready:ok})})});
