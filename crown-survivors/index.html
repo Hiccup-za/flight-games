@@ -456,7 +456,7 @@ const UI=(()=>{const R=document.getElementById('ui'),$=h=>{const d=document.crea
   buy:v=>{const m=META[+v],k=m[0],lv=S.meta[k],cost=m[3]*(lv+1);if(lv>=m[4])return;if(S.gold>=cost){S.gold-=cost;S.meta[k]++;save();sfx.buy();vib(20)}else toast={t:'Need '+(cost-S.gold)+' more gold',l:1.2}},
   pick:v=>{const c=G&&G.choice;if(c&&c.t>.35&&c.cards[+v])choose(c.cards[+v])},
   reroll:()=>{const c=G&&G.choice;if(c&&G.rerolls>0){G.rerolls--;c.cards=cards();c.t=.2}},
-  pause:()=>{if(G&&!G.choice&&!G.over)G.paused=true},resume:()=>{G.paused=false},giveup:()=>{G.paused=false;endRun(false)},again:()=>go('play',startRun),oshop:()=>go('shop'),home:()=>go('title')};
+  pause:()=>{if(G&&!G.choice&&!G.over)G.paused=true},resume:()=>{G.paused=false},giveup:()=>{G.paused=false;endRun(false)},again:()=>go('play',startRun),oshop:()=>go('shop'),home:()=>go('title'),tab:v=>{UI.btab=v}};
  function init(){host=$('<div id="scr"></div>');R.append(host);toastEl=$('<div id="toast"></div>');fadeEl=$('<div id="fade"></div>');R.append(toastEl,fadeEl);
   R.addEventListener('pointerdown',e=>{au();const b=e.target.closest('[data-a]');if(b&&!b.disabled&&b.tagName!=='CANVAS')sfx.click()});
   R.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b||b.disabled||b.tagName==='CANVAS'||trans)return;const f=A[b.dataset.a];if(f)f(b.dataset.v)})}
@@ -468,30 +468,29 @@ const UI=(()=>{const R=document.getElementById('ui'),$=h=>{const d=document.crea
   '<div class="pill cs-9 cs-panel"><div class="fill">'+img('coin')+'<span data-b="gold">'+S.gold+'</span></div></div>'+
   '<div class="tmeta">Best '+tm(S.best)+' · Wins '+S.wins+(S.curse?' · Curse '+S.curse:'')+'</div>'+
   '<div class="tmenu">'+btn('PLAY','play','primary','wide')+btn(img('heroes')+'HEROES','heroes')+btn(img('shop')+'SHOP','shop')+btn(img('skull')+'BEASTS','best')+btn(img('curse')+'CURSE','curse')+'</div></div>'}
- function sChars(){let h='<div class="scr dark"><div class="h1">'+img('crown')+'HEROES</div><div class="row"><div class="pill cs-9 cs-panel"><div class="fill">'+img('coin')+'<span data-b="gold">'+S.gold+'</span></div></div></div><div class="hgrid">';
+ function sChars(){let h='<div class="scr dark"><div class="hdr"><div class="h1">'+img('crown')+'HEROES</div><div class="pill cs-9 cs-panel"><div class="fill">'+img('coin')+'<span data-b="gold">'+S.gold+'</span></div></div></div><div class="hgrid">';
   CH.forEach((c,i)=>{const own=S.chars.includes(i),sel=S.char===i,can=S.gold>=c.p;
    h+='<div class="cs-9 hero '+(sel?'cs-panel-gold':'cs-panel')+'" data-a="hero" data-v="'+i+'"><div class="in">'+(sel?img('crown','crown'):'')+
     '<div class="port'+(own?'':' locked')+'" style="background:'+c.c+'33">'+spr('hero:'+i,sel?'1':'')+(own?'':'<div class="lock">'+img('lock')+btn(img('coin')+c.p,'hero','price','price',i,!can)+'</div>')+(sel?'<div class="ribbon cs-9 cs-tag-weapon d">SELECTED</div>':'')+'</div>'+
     '<div class="cs-9 cs-btn cs-btn-primary-normal plate d ellip" style="pointer-events:none">'+esc(c.n.toUpperCase())+'</div><div class="role d" style="font-size:8px">'+ROLE[i]+(S.winsBy[i]?' ♛'+S.winsBy[i]:'')+'</div>'+
     '<div class="stat"><div><b>HP '+c.hp+'</b><br><span class="g">'+esc(c.perk)+'</span></div>'+img(wIc(c.w))+'</div></div></div>'});
   return h+'</div><div class="foot">'+btn('BACK','title','secondary','','',false).replace('btn ','btn grow ')+btn('START RUN','start','primary','',' ',!S.chars.includes(S.char)).replace('btn ','btn grow ')+'</div></div>'}
- function sShop(){let h='<div class="scr dark"><div class="h1">'+img('shop')+'UPGRADES</div><div class="pill cs-9 cs-panel"><div class="fill">'+img('coin')+'<span data-b="gold">'+S.gold+'</span></div></div><div class="list" style="margin-top:12px">';
+ function sShop(){let h='<div class="scr dark"><div class="h1">'+img('shop')+'UPGRADES</div><div class="list">';
   META.forEach(([k,n,d,base,max],i)=>{const lv=S.meta[k],cost=base*(lv+1),mx=lv>=max,can=S.gold>=cost;let p='';for(let j=0;j<max;j++)p+='<i class="'+(j<lv?'on':'')+'"></i>';
-   h+=nine('cs-panel mrow','<div class="ic">'+img(MI[k])+'</div><div class="tx"><div class="nm d ellip">'+n.toUpperCase()+'</div><div class="ds ellip">'+d+'</div><div class="lv">'+p+'</div></div>'+(mx?btn('MAX','buy','price','buy',i,true):btn(img('coin')+cost,'buy','price','buy',i,!can)))});
+   h+='<div class="srow">'+nine('cs-panel mrow','<div class="ic">'+img(MI[k])+'</div><div class="tx"><div class="nm d">'+n.toUpperCase()+'</div><div class="ds">'+d+'</div><div class="lv">'+p+'</div></div>')+(mx?btn('MAX','buy','price','buy',i,true):btn(img('coin')+cost,'buy','price','buy',i,!can))+'</div>'});
+  return h+'</div><div class="foot">'+btn('BACK','title').replace('btn ','btn grow ')+'<div class="pill cs-9 cs-panel"><div class="fill">'+img('coin')+'<span data-b="gold">'+S.gold+'</span></div></div></div></div>'}
+ function sBest(){const ks=Object.keys(ETYPE),mh=Math.max(...ks.map(k=>ETYPE[k].hp)),ms=Math.max(...ks.map(k=>ETYPE[k].spd)),bt=UI.btab||'e';let h='<div class="scr dark"><div class="h1">'+img('skull')+'BESTIARY</div><div class="tabs">'+btn('ENEMIES','tab',bt==='e'?'primary':'secondary','','e')+btn('BOSSES','tab',bt==='b'?'primary':'secondary','','b')+'</div><div class="grow bwrap">';
+  if(bt==='e'){h+='<div class="bgrid">';ks.forEach(k=>{const e=ETYPE[k],w=WORLD[k];h+=nine('cs-panel beast',spr('en:'+k)+'<div class="nm">'+k[0].toUpperCase()+k.slice(1)+'</div><div class="wtag" style="background:'+WC[w]+'">'+WN[w]+'</div><div class="bar"><span>HP</span><i><b style="width:'+Math.round(e.hp/mh*100)+'%;background:#d24b4b"></b></i></div><div class="bar"><span>SPD</span><i><b style="width:'+Math.round(e.spd/ms*100)+'%"></b></i></div>')});h+='</div>'}
+  else{h+='<div class="bgrid boss">';BOSS.forEach((b,i)=>{h+='<div class="cs-9 cs-boss-frame cs-boss bcard"><div class="in">'+spr('boss:'+i)+'<div class="nm">'+b.n.replace(' ','<br>')+'</div><div class="tm">'+tm(b.t)+' · '+WN[i]+'</div></div></div>'});h+='</div>'}
   return h+'</div><div class="foot">'+btn('BACK','title').replace('btn ','btn grow ')+'</div></div>'}
- function sBest(){const ks=Object.keys(ETYPE),mh=Math.max(...ks.map(k=>ETYPE[k].hp)),ms=Math.max(...ks.map(k=>ETYPE[k].spd));let h='<div class="scr dark"><div class="h1">'+img('skull')+'BESTIARY</div><div class="scroll"><div class="bgrid">';
-  ks.forEach(k=>{const e=ETYPE[k],w=WORLD[k];h+=nine('cs-panel beast',spr('en:'+k)+'<div class="nm">'+k[0].toUpperCase()+k.slice(1)+'</div><div class="wtag" style="background:'+WC[w]+'">'+WN[w]+'</div><div class="bar"><span>HP</span><i><b style="width:'+Math.round(e.hp/mh*100)+'%;background:#d24b4b"></b></i></div><div class="bar"><span>SPD</span><i><b style="width:'+Math.round(e.spd/ms*100)+'%"></b></i></div>')});
-  h+='</div><div class="sec">BOSSES</div><div class="bgrid boss">';
-  BOSS.forEach((b,i)=>{h+='<div class="cs-9 cs-boss-frame cs-boss bcard"><div class="in">'+spr('boss:'+i)+'<div class="nm">'+b.n+'</div><div class="tm">'+tm(b.t)+' · '+WN[i]+'</div></div></div>'});
-  return h+'</div></div><div class="foot">'+btn('BACK','title').replace('btn ','btn grow ')+'</div></div>'}
  function sChoice(){const c=G.choice,ev=k=>k==='e';let h='<div class="scr dim" style="justify-content:center"><div class="h1">'+img('crown')+(c.src==='chest'?'TREASURE!':'LEVEL UP!')+'</div><div class="sub">Choose one</div><div class="cards">';
   c.cards.forEach((cd,i)=>{const f=cardInfo(cd),k=cd.kind,ic=k==='w'||k==='e'?wIc(cd.k):k==='p'?pIc(cd.k):k==='i'?pIc(INF[cd.k].ic):cd.k==='gold'?'coin':'heart';
    let pp='';if(f.lv&&f.lv<6){pp='<div class="pips">';for(let s=0;s<5;s++)pp+='<i class="'+(s<f.lv?'cs-pip-on':'cs-pip-off')+'"></i>';pp+='</div>'}
    const tg=k==='p'||k==='i'?'cs-tag-passive':'cs-tag-weapon';
-   h+='<div class="cs-9 card '+(ev(k)?'cs-card-frame-selected sel':'cs-card-frame')+'" data-a="pick" data-v="'+i+'" style="animation-delay:'+(i*.06)+'s"><div class="in"><div class="ic">'+img(ic)+(k==='i'?'<span class="inf">∞</span>':'')+'</div><div class="tx"><span class="cs-9 '+tg+' tg">'+esc(f.tag.replace('∞ ','').replace(' · BUILD MAXED',''))+'</span><div class="nm d ellip">'+esc(f.n)+'</div><div class="ds">'+esc(f.d)+'</div></div>'+pp+'</div></div>'});
-  return h+'</div><div style="height:12px"></div>'+(G.rerolls>0?btn(img('reset')+'REROLL ('+G.rerolls+')','reroll','secondary','" style="height:52px;padding:0 18px 4px'):'')+'</div>'}
+   h+='<div class="cs-9 card '+(ev(k)?'cs-card-frame-selected sel':'cs-card-frame')+'" data-a="pick" data-v="'+i+'" style="animation-delay:'+(i*.06)+'s"><div class="in"><div class="ic">'+img(ic)+(k==='i'?'<span class="inf">∞</span>':'')+'</div><div class="tx"><div class="top"><span class="cs-9 '+tg+' tg">'+esc(f.tag.replace('∞ ','').replace(' · BUILD MAXED',''))+'</span>'+pp+'</div><div class="nm d">'+esc(f.n)+'</div><div class="ds">'+esc(f.d)+'</div></div></div></div>'});
+  return h+'</div><div style="height:12px"></div>'+(G.rerolls>0?btn(img('reset')+'REROLL ('+G.rerolls+')','reroll','secondary','rr'):'')+'</div>'}
  function buildRow(){let h='<div class="build">';for(const k in G.w)h+='<div class="slot">'+img(wIc(k))+'<b>'+(G.evo[k]?'★':G.w[k])+'</b></div>';for(const k in G.ps)h+='<div class="slot p">'+img(pIc(k))+'<b>'+G.ps[k]+'</b></div>';return h+'</div>'}
- function sPause(){return '<div class="scr dim">'+nine('cs-panel-gold mpanel','<div class="h1">'+img('pause')+'PAUSED</div><div class="note">'+tm(G.t)+' · LV '+G.lvl+' · '+G.kills+' kills</div>'+buildRow()+'<div class="mbtns">'+btn('RESUME','resume','primary')+'<div class="two">'+btn(img(S.muted?'mute':'settings')+(S.muted?'SOUND OFF':'SOUND ON'),'mute')+btn('GIVE UP','giveup')+'</div></div>')+'</div>'}
+ function sPause(){return '<div class="scr dim">'+nine('cs-panel-gold mpanel','<div class="h1">'+img('pause')+'PAUSED</div><div class="note">'+tm(G.t)+' · LV '+G.lvl+' · '+G.kills+' kills</div>'+buildRow()+'<div class="mbtns">'+btn('RESUME','resume','primary')+'<div class="two">'+btn(img(S.muted?'mute':'settings')+(S.muted?'MUTED':'SOUND'),'mute')+btn('GIVE UP','giveup')+'</div></div>')+'</div>'}
  function sOver(){const g=G,o=g.over,aff=META.find(m=>S.meta[m[0]]<m[4]&&S.gold>=m[3]*(S.meta[m[0]]+1));let kv='';[['Survived',tm(g.t)],['Level',g.lvl],['Kills',g.kills],['Bosses beaten',g.bb||0],['Damage dealt',Math.round(g.dmgDealt)]].forEach(([a,b])=>kv+='<div class="kv"><span>'+a+'</span><b>'+b+'</b></div>');
   return '<div class="scr dim">'+nine((o.win?'cs-panel-gold':'cs-panel')+' mpanel','<div class="h1" style="'+(o.win?'':'color:var(--cs-ruby-light);text-shadow:0 3px 0 var(--cs-ruby-dark),0 6px 0 #0b0c10')+'">'+img(o.win?'crown':'skull')+(o.win?'VICTORY!':'DEFEATED')+'</div>'+kv+'<div class="gold">'+img('coin')+'+<span data-b="ogold">0</span></div>'+(o.newCurse?'<div class="note" style="color:#c9a0ff">CURSE '+o.newCurse+' unlocked! (harder, +gold)</div>':'')+buildRow()+(aff?'<div class="note" style="color:#7ee07a">You can afford: '+aff[1]+'!</div>':'')+
    '<div class="mbtns">'+btn(img('reset')+'AGAIN','again','primary')+'<div class="two">'+btn(img('shop')+'SHOP','oshop')+btn('HOME','home')+'</div></div>')+'</div>'}
@@ -504,15 +503,27 @@ const UI=(()=>{const R=document.getElementById('ui'),$=h=>{const d=document.crea
   '<div class="hbtns">'+btn(img('pause'),'pause','secondary','ibtn')+btn(img(S.muted?'mute':'settings'),'mute','secondary','ibtn')+'</div>'+
   '<div class="bossbar cs-9 cs-boss-frame cs-boss" data-b="bossbar" style="display:none"><div class="in"><div class="nm" data-b="bname"></div><div class="cs-9 cs-hp-bar-frame cs-hp"><div class="cs-hp-bar-fill" data-w="bhp"></div></div></div></div></div>'}
  // ---- sprites in mini canvases ----
- function drawSpr(c){const r=c.getBoundingClientRect();if(!r.width)return;const w=Math.round(r.width*DPR),h=Math.round(r.height*DPR);if(c.width!==w){c.width=w;c.height=h}
-  const q=c.getContext('2d'),ox=x;q.setTransform(1,0,0,1,0,0);q.clearRect(0,0,w,h);q.imageSmoothingEnabled=false;x=q;try{const [t,k]=c.dataset.k.split(':'),anim=c.dataset.a==='1'||t!=='hero';
-   if(t==='hero'){const n=+c.dataset.int,s=n||r.width/26;q.setTransform(DPR*s,0,0,DPR*s,n?Math.round(w/2):w/2,n?Math.round(h*.55):h*.55);heroS(0,0,+k,1,anim?clock*8:0,1,anim&&(clock%3)<.1)}
-   else if(t==='en'){const s=r.width/28;q.setTransform(DPR*s,0,0,DPR*s,w/2,h*.55);enemyS({type:k,x:0,y:0,r:ETYPE[k].r,ph:clock,flash:0,kx:0,ky:0})}
-   else{const B=BOSS[+k],s=r.width/(B.r*2.7);q.setTransform(DPR*s,0,0,DPR*s,w/2,h*.55);enemyS({boss:1,bi:+k,type:'boss',x:0,y:0,r:B.r,ph:clock,bph:0,flash:0,mhp:1,hp:1,kx:0,ky:0})}}catch(e){}finally{x=ox}}
+ const BB={};
+ function paintSpr(key,ph,anim){const [t,k]=key.split(':');
+  if(t==='hero')heroS(0,0,+k,1,anim?ph*8:0,1,anim&&(ph%3)<.1);
+  else if(t==='en')enemyS({type:k,x:0,y:0,r:ETYPE[k].r,ph,flash:0,kx:0,ky:0});
+  else{const B=BOSS[+k];enemyS({boss:1,bi:+k,type:'boss',x:0,y:0,r:B.r,ph,bph:0,flash:0,mhp:1,hp:1,kx:0,ky:0})}}
+ function sprBox(key){if(BB[key])return BB[key];const N=720,K=2,c=document.createElement('canvas');c.width=c.height=N;const q=c.getContext('2d'),ox=x,oc=clock;let L=N,T=N,R=0,B=0;x=q;
+  try{for(let i=0;i<24;i++){clock=i*.137;q.setTransform(K,0,0,K,N/2,N/2);q.clearRect(-N,-N,2*N,2*N);paintSpr(key,clock,true);if(key.startsWith('hero'))paintSpr(key,0,false);
+   const d=q.getImageData(0,0,N,N).data;for(let y=0;y<N;y++)for(let xx=0;xx<N;xx++)if(d[(y*N+xx)*4+3]>6){if(xx<L)L=xx;if(xx>R)R=xx;if(y<T)T=y;if(y>B)B=y}}}finally{x=ox;clock=oc}
+  const P=1.5,b={l:(L-N/2)/K-P,t:(T-N/2)/K-P,r:(R+1-N/2)/K+P,b:(B+1-N/2)/K+P};b.w=b.r-b.l;b.h=b.b-b.t;return BB[key]=b}
+ function drawSpr(c){const key=c.dataset.k,b=sprBox(key),fix=+c.dataset.int;
+  if(fix){const cw=Math.ceil(b.w*fix)+4,ch=Math.ceil(b.h*fix)+4;if(c.style.width!==cw+'px'){c.style.width=cw+'px';c.style.height=ch+'px'}}
+  const r=c.getBoundingClientRect();if(!r.width)return;const w=Math.round(r.width*DPR),h=Math.round(r.height*DPR);if(c.width!==w||c.height!==h){c.width=w;c.height=h}
+  const q=c.getContext('2d'),ox=x;q.setTransform(1,0,0,1,0,0);q.clearRect(0,0,w,h);q.imageSmoothingEnabled=false;
+  let sc=fix?fix*DPR:Math.min((w-2)/b.w,(h-2)/b.h);if(!fix&&sc>=2)sc=Math.floor(sc);
+  const tx=Math.round(w/2-(b.l+b.w/2)*sc),ty=Math.round(h/2-(b.t+b.h/2)*sc);q.setTransform(sc,0,0,sc,tx,ty);
+  x=q;try{const anim=c.dataset.a==='1'||!key.startsWith('hero');paintSpr(key,clock,anim)}catch(e){}finally{x=ox}}
+
  function frame(){let k=scene,el=null;
   if(scene==='play'&&G){k='play'+(G.over?'o':G.choice?'c':G.paused?'p':'');}
   if(modal&&scene!=='title')modal=null;
-  const hk=k+'|'+(modal||'')+'|'+(scene==='play'&&G&&G.choice?G.choice.cards.map(c=>c.kind+c.k).join()+G.rerolls:'')+'|'+(scene==='chars'||scene==='shop'||scene==='title'?S.gold+S.char+S.chars.join()+JSON.stringify(S.meta)+S.muted+S.curse:'')+'|'+(scene==='play'&&G?G.muted+S.muted+(G.over?G.over.newCurse:''):'');
+  const hk=k+'|'+(modal||'')+'|'+(scene==='play'&&G&&G.choice?G.choice.cards.map(c=>c.kind+c.k).join()+G.rerolls:'')+'|'+(scene==='bestiary'?UI.btab:'')+(scene==='chars'||scene==='shop'||scene==='title'?S.gold+S.char+S.chars.join()+JSON.stringify(S.meta)+S.muted+S.curse:'')+'|'+(scene==='play'&&G?G.muted+S.muted+(G.over?G.over.newCurse:''):'');
   if(hk!==key){key=hk;let h='';if(scene==='title')h=sTitle()+sModal();else if(scene==='chars')h=sChars();else if(scene==='shop')h=sShop();else if(scene==='bestiary')h=sBest();
    else if(scene==='play'&&G){h=sHud();if(G.over)h+=sOver();else if(G.choice)h+=sChoice();else if(G.paused)h+=sPause()}
    host.innerHTML=h;bound={};host.querySelectorAll('[data-b],[data-w]').forEach(e=>bound[e.dataset.b||e.dataset.w]=e)}
@@ -525,7 +536,7 @@ const UI=(()=>{const R=document.getElementById('ui'),$=h=>{const d=document.crea
   host.querySelectorAll('canvas.spr').forEach(drawSpr);
   if(toast){toastEl.style.display='block';if(toastEl.textContent!==toast.t)toastEl.textContent=toast.t}else toastEl.style.display='none';
   fadeEl.style.opacity=trans?Math.max(0,trans.t<.22?trans.t/.22:1-(trans.t-.22)/.22):0}
- init();return{frame,get modal(){return modal},set modal(v){modal=v}}})();
+ init();return{frame,btab:'e',get modal(){return modal},set modal(v){modal=v}}})();
 window.__cs={ui:UI,openChoice:src=>openChoice(src||'lvl'),setHp:f=>{G.p.hp=G.p.mhp*f},cards:()=>cards(),INF,get resetAsk(){return resetAsk},get btns(){return btns},BOSS,spawnBoss:i=>{G.bossI=i+1;spawnBoss(i)},setPhase:n=>{G.phase=n},setT:t=>{G.t=t},get G(){return G},get S(){return S},get scene(){return scene},start:()=>{scene='play';startRun()},auto:(on=true)=>{G.auto=on},god:(on=true)=>{G.god=on},speed:n=>speedMul=n,go:s=>{scene=s},
  pickAuto:()=>{if(G&&G.choice){const c=G.choice;c.t=1;const cs=c.cards;const e=cs.find(q=>q.kind==='e')||cs.find(q=>q.kind==='w'&&q.lv>1)||cs[Math.random()*cs.length|0];choose(e);return true}return false},addGold:n=>{S.gold+=n;save()}};
 })();
