@@ -14,11 +14,12 @@ a.g:active{transform:translateY(4px);box-shadow:0 2px 0 #3b2a1a}.ic{width:70px;h
 .g b{font-size:21px;display:block}.g span{font-size:13px}.play{margin-left:auto;background:#c8452f;color:#fff3c4;border:3px solid #3b2a1a;border-radius:10px;padding:8px 10px;font-weight:bold}
 .how{background:#f3e2b8;border:4px solid #3b2a1a;border-radius:16px;padding:12px 16px;font-size:14px;line-height:1.45}.how h2{margin:4px 0 6px;font-size:18px}.how ol{padding-left:20px;margin:6px 0}
 </style></head><body><div class="wrap">
-<h1>FLIGHT GAMES</h1><div class="sub">♛ four royal games for the skies ♛</div>
+<h1>FLIGHT GAMES</h1><div class="sub">♛ five royal games for the skies ♛</div>
 <div id="st">⏳ Preparing offline mode…</div>
 <a class="g" href="coin-dash/"><canvas class="ic" id="i1" width="140" height="140"></canvas><div><b>Coin Dash</b><span>3-world runner · boss · endless</span></div><div class="play">PLAY</div></a>
 <a class="g" href="crown-survivors/"><canvas class="ic" id="i2" width="140" height="140"></canvas><div><b>Crown Survivors</b><span>horde survival · builds · bosses</span></div><div class="play">PLAY</div></a>
 <a class="g" href="crown-survivors-classic/"><canvas class="ic" id="i2c" width="140" height="140"></canvas><div><b>Crown Survivors Classic</b><span>the original look</span></div><div class="play">PLAY</div></a>
+<a class="g" href="crown-defense-idle/"><canvas class="ic" id="i2d" width="140" height="140"></canvas><div><b>Crown Defense Idle</b><span>idle waves · upgrades · prestige</span></div><div class="play">PLAY</div></a>
 <a class="g" href="critter-crown/"><canvas class="ic" id="i3" width="140" height="140"></canvas><div><b>Critter Crown</b><span>collect cards · open packs · battle</span></div><div class="play">PLAY</div></a>
 <div class="how"><h2>✈️ Before you board</h2><ol>
 <li>Open this page while online and wait for <b>Ready for offline ✓</b>.</li>
@@ -36,5 +37,5 @@ const st=document.getElementById('st');function ready(){st.textContent='Ready fo
 if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js',{scope:'./'}).then(()=>navigator.serviceWorker.ready).then(r=>{
  navigator.serviceWorker.addEventListener('message',e=>{if(e.data&&e.data.ready)ready()});const ask=()=>{const w=navigator.serviceWorker.controller||r.active;if(w)w.postMessage('status')};ask();setInterval(ask,1500)}).catch(e=>{st.textContent='⚠ Offline mode unavailable: '+e.message})}
 else st.textContent='⚠ This browser cannot cache for offline';
-</script><script>setTimeout(()=>{const a=document.getElementById('i2'),b=document.getElementById('i2c');if(a&&b)b.getContext('2d').drawImage(a,0,0)},50)</script>
+</script><script>setTimeout(()=>{const a=document.getElementById('i2'),b=document.getElementById('i2c');if(a&&b)b.getContext('2d').drawImage(a,0,0);const d=document.getElementById('i2d');if(a&&d)d.getContext('2d').drawImage(a,0,0)},50)</script>
 </body></html>
