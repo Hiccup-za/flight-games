@@ -165,3 +165,15 @@
 @media (max-height:720px){.hdr{flex-direction:row;gap:14px}.hdr .h1{margin:0}}
 @keyframes cin{from{opacity:0}to{opacity:1}}
 @media (max-height:720px){.hgrid{margin-top:44px}}
+
+.tstage{position:relative}
+.tstage>canvas{position:relative;z-index:2;animation:tbob 1.6s ease-in-out infinite}
+.tglow{position:absolute;z-index:1;left:50%;top:50%;width:200px;height:200px;margin:-80px 0 0 -100px;border-radius:50%;background:radial-gradient(circle,#f2b63266 0%,#f2b63222 40%,transparent 70%);animation:tglow 2.4s ease-in-out infinite}
+.embers{position:absolute;inset:-200px 0 -40px;pointer-events:none;overflow:hidden;z-index:0}
+.embers i{position:absolute;bottom:0;width:4px;height:4px;background:#ffb13d;box-shadow:0 0 6px #ff8a3d;opacity:0;animation:ember 6s linear infinite}
+.embers i:nth-child(3n){background:#f2b632;width:3px;height:3px}
+.embers i:nth-child(4n){background:#b3202a;box-shadow:0 0 6px #b3202a}
+@keyframes tbob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes tglow{0%,100%{opacity:.6;transform:scale(.9)}50%{opacity:1;transform:scale(1.08)}}
+@keyframes ember{0%{transform:translate(0,0);opacity:0}10%{opacity:1}100%{transform:translate(24px,-520px);opacity:0}}
+@media (prefers-reduced-motion:reduce){.embers,.tstage>canvas,.tglow{animation:none}}
