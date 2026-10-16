@@ -347,7 +347,7 @@ function icon(kind,k,cx,cy,r){x.save();x.translate(cx,cy);const col=kind==='p'?P
 function edgePt(m){const p=G.p,hw=W/Z/2+m,hh=H/Z/2+m,per=2*(hw+hh),r=Math.random()*per;let ex,ey;if(r<2*hw){ex=-hw+r;ey=Math.random()<.5?-hh:hh}else{ey=-hh+(r-2*hw);ex=Math.random()<.5?-hw:hw}return[p.x+ex,p.y+ey]}
 function arrowAt(p,tx,ty,hw,hh,col,sz){const dx=tx-p.x,dy=ty-p.y;const t=Math.min(hw/Math.abs(dx||1e-6),hh/Math.abs(dy||1e-6));const ax=p.x+dx*t,ay=p.y+dy*t,a=Math.atan2(dy,dx);x.save();x.translate(ax,ay);x.rotate(a);x.fillStyle=col;x.strokeStyle=pal.ink;x.lineWidth=2;x.beginPath();x.moveTo(sz,0);x.lineTo(-sz*.6,-sz*.7);x.lineTo(-sz*.6,sz*.7);x.closePath();x.fill();x.stroke();x.restore()}
 function offInd(p,hw,hh){const out=e=>Math.abs(e.x-p.x)>hw+14||Math.abs(e.y-p.y)>hh+14;const near=[];for(const e of G.en){if(!out(e))continue;if(e.boss||e.elite)continue;near.push([d2(e,p),e])}near.sort((a,b)=>a[0]-b[0]);
- x.globalAlpha=.55+.2*Math.sin(clock*6);for(const [,e] of near.slice(0,10))arrowAt(p,e.x,e.y,hw,hh,'#ff6b5a',6);x.globalAlpha=1;
+ 
  for(const e of G.en)if((e.elite||e.boss)&&out(e))arrowAt(p,e.x,e.y,hw,hh,e.boss?'#ff6a1a':'#ff8a3d',e.boss?13:10);
  for(const q of G.gems)if(q.k==='chest'&&out(q)){arrowAt(p,q.x,q.y,hw,hh,'#ffd23f',11)}}
 function drawWorld(){const g=G,p=g.p,ph=PHASE[Math.min(PHASE.length-1,g.phase)];x.save();const sx=(Math.random()-.5)*shake*U,sy=(Math.random()-.5)*shake*U;x.translate(W/2+sx,H/2+sy);x.scale(Z,Z);x.translate(-p.x,-p.y);
@@ -464,14 +464,14 @@ const UI=(()=>{const R=document.getElementById('ui'),$=h=>{const d=document.crea
  function sTitle(){const pl=S.chars.length;return '<div class="scr bg">'+
   '<div class="corner" style="right:10px">'+btn(img(S.muted?'mute':'settings'),'settings','secondary','ibtn')+'</div>'+
   '<img class="logo" src="ui/logo.webp" alt="Crown Survivors">'+
-  '<div class="tstage">'+spr('hero:'+S.char,'1')+'</div>'+
+  '<div class="tstage">'+spr('hero:'+S.char,'1').replace('<canvas','<canvas data-int="3"')+'</div>'+
   '<div class="pill cs-9 cs-panel"><div class="fill">'+img('coin')+'<span data-b="gold">'+S.gold+'</span></div></div>'+
   '<div class="tmeta">Best '+tm(S.best)+' · Wins '+S.wins+(S.curse?' · Curse '+S.curse:'')+'</div>'+
   '<div class="tmenu">'+btn('PLAY','play','primary','wide')+btn(img('heroes')+'HEROES','heroes')+btn(img('shop')+'SHOP','shop')+btn(img('skull')+'BEASTS','best')+btn(img('curse')+'CURSE','curse')+'</div></div>'}
  function sChars(){let h='<div class="scr dark"><div class="h1">'+img('crown')+'HEROES</div><div class="row"><div class="pill cs-9 cs-panel"><div class="fill">'+img('coin')+'<span data-b="gold">'+S.gold+'</span></div></div></div><div class="hgrid">';
   CH.forEach((c,i)=>{const own=S.chars.includes(i),sel=S.char===i,can=S.gold>=c.p;
    h+='<div class="cs-9 hero '+(sel?'cs-panel-gold':'cs-panel')+'" data-a="hero" data-v="'+i+'"><div class="in">'+(sel?img('crown','crown'):'')+
-    '<div class="port" style="background:'+c.c+'33">'+spr('hero:'+i,sel?'1':'')+(own?'':'<div class="lock">'+img('lock')+btn(img('coin')+c.p,'hero','price','price',i,!can)+'</div>')+(sel?'<div class="ribbon cs-9 cs-tag-weapon d">SELECTED</div>':'')+'</div>'+
+    '<div class="port'+(own?'':' locked')+'" style="background:'+c.c+'33">'+spr('hero:'+i,sel?'1':'')+(own?'':'<div class="lock">'+img('lock')+btn(img('coin')+c.p,'hero','price','price',i,!can)+'</div>')+(sel?'<div class="ribbon cs-9 cs-tag-weapon d">SELECTED</div>':'')+'</div>'+
     '<div class="cs-9 cs-btn cs-btn-primary-normal plate d ellip" style="pointer-events:none">'+esc(c.n.toUpperCase())+'</div><div class="role d" style="font-size:8px">'+ROLE[i]+(S.winsBy[i]?' ♛'+S.winsBy[i]:'')+'</div>'+
     '<div class="stat"><div><b>HP '+c.hp+'</b><br><span class="g">'+esc(c.perk)+'</span></div>'+img(wIc(c.w))+'</div></div></div>'});
   return h+'</div><div class="foot">'+btn('BACK','title','secondary','','',false).replace('btn ','btn grow ')+btn('START RUN','start','primary','',' ',!S.chars.includes(S.char)).replace('btn ','btn grow ')+'</div></div>'}
@@ -506,7 +506,7 @@ const UI=(()=>{const R=document.getElementById('ui'),$=h=>{const d=document.crea
  // ---- sprites in mini canvases ----
  function drawSpr(c){const r=c.getBoundingClientRect();if(!r.width)return;const w=Math.round(r.width*DPR),h=Math.round(r.height*DPR);if(c.width!==w){c.width=w;c.height=h}
   const q=c.getContext('2d'),ox=x;q.setTransform(1,0,0,1,0,0);q.clearRect(0,0,w,h);q.imageSmoothingEnabled=false;x=q;try{const [t,k]=c.dataset.k.split(':'),anim=c.dataset.a==='1'||t!=='hero';
-   if(t==='hero'){const s=r.width/26;q.setTransform(DPR*s,0,0,DPR*s,w/2,h*.55);heroS(0,0,+k,1,anim?clock*8:0,1,anim&&(clock%3)<.1)}
+   if(t==='hero'){const n=+c.dataset.int,s=n||r.width/26;q.setTransform(DPR*s,0,0,DPR*s,n?Math.round(w/2):w/2,n?Math.round(h*.55):h*.55);heroS(0,0,+k,1,anim?clock*8:0,1,anim&&(clock%3)<.1)}
    else if(t==='en'){const s=r.width/28;q.setTransform(DPR*s,0,0,DPR*s,w/2,h*.55);enemyS({type:k,x:0,y:0,r:ETYPE[k].r,ph:clock,flash:0,kx:0,ky:0})}
    else{const B=BOSS[+k],s=r.width/(B.r*2.7);q.setTransform(DPR*s,0,0,DPR*s,w/2,h*.55);enemyS({boss:1,bi:+k,type:'boss',x:0,y:0,r:B.r,ph:clock,bph:0,flash:0,mhp:1,hp:1,kx:0,ky:0})}}catch(e){}finally{x=ox}}
  function frame(){let k=scene,el=null;

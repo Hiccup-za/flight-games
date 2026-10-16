@@ -141,3 +141,12 @@
 #fade{position:absolute;inset:0;background:#0b0c10;opacity:0;pointer-events:none;z-index:6}
 #ui .cs-btn{border-width:12px 10px}
 #ui .plate{font-size:9px}
+/* v15 fixes */
+.tstage canvas[data-int]{width:72px;height:72px;image-rendering:pixelated}
+.hero .port.locked{flex-direction:column;justify-content:center;gap:2px}
+.hero .port.locked canvas{width:56px;height:56px;flex:0 0 auto;filter:grayscale(.6) brightness(.65)}
+.hero .port.locked .lock{position:static;inset:auto;background:none;flex-direction:row;gap:4px}
+.hero .port.locked .lock img{width:24px;height:24px}
+.hero .port.locked .price{height:36px;width:96px;font-size:10px}
+.lvb{right:12px;top:calc(env(safe-area-inset-top) + 86px);padding:3px 5px 2px;background:#14161ccc;border:2px solid var(--cs-gold-dark);white-space:nowrap;line-height:1}
+.hbtns{top:calc(env(safe-area-inset-top) + 112px)}
