@@ -146,14 +146,14 @@ function endRun(win){if(G.over)return;const gold=Math.round(G.gold+G.kills/30+(w
  S.tut=true;save()}
 // ===== weapons =====
 function fireWeapons(dt){const p=G.p,w=G.w,ev=G.evo;for(const k in G.cd)G.cd[k]-=dt;
- if(w.bolt&&!(G.cd.bolt>0)){const l=w.bolt,n=ev.bolt?5:[1,1,2,2,3][l-1],dmg=(ev.bolt?24:10+4*l);G.cd.bolt=(ev.bolt?.4:[.8,.75,.7,.6,.55][l-1])*SC.cd;const t=nearest(p.x,p.y,320);
+ if(w.bolt&&!(G.cd.bolt>0)){const l=w.bolt,n=ev.bolt?5:[1,1,2,2,3][l-1],dmg=(ev.bolt?24:10+4*l);G.cd.bolt=(ev.bolt?.4:[.8,.75,.7,.6,.55][l-1])*SC.cd;const t=nearest(p.x,p.y,150*SC.area);
   if(t){sfx.shoot();const a0=Math.atan2(t.y-p.y,t.x-p.x);for(let i=0;i<n;i++){const a=a0+(i-(n-1)/2)*.16;G.pr.push({t:'bolt',x:p.x,y:p.y,vx:Math.cos(a)*300,vy:Math.sin(a)*300,dmg,r:5*SC.area,l:1.2,pierce:ev.bolt?4:(l>=5?2:1),hit:new Set()})}}}
  if(w.orb){const l=w.orb,n=ev.orb?8:[1,2,2,3,5][l-1],R=(ev.orb?75:48)*SC.area,dmg=ev.orb?20:6+3*l;G.orbA+=dt*(ev.orb?4:3);
   for(let i=0;i<n;i++){const a=G.orbA+i*6.283/n,ox=p.x+Math.cos(a)*R,oy=p.y+Math.sin(a)*R;for(const e of G.en){if(e.dead)continue;if((e.x-ox)**2+(e.y-oy)**2<(e.r+8*SC.area)**2&&!(e.hitT.orb>G.t)){e.hitT.orb=G.t+.4;hurtEnemy(e,dmg,40,e.x-p.x,e.y-p.y)}}}}
  if(w.rain&&!(G.cd.rain>0)){const l=w.rain,n=ev.rain?5:[1,1,2,2,3][l-1];G.cd.rain=(ev.rain?2:3)*SC.cd;for(let i=0;i<n;i++){const t=G.en.length?G.en[Math.random()*G.en.length|0]:null;const tx=t&&d2(t,p)<250*250?t.x:p.x+rnd(-100,100),ty=t&&d2(t,p)<250*250?t.y:p.y+rnd(-100,100);
   G.pools.push({x:tx,y:ty,r:(ev.rain?46:26+3*l)*SC.area,l:ev.rain?3.5:2.6,dmg:ev.rain?16:5+2*l,tick:0,slow:ev.rain})}tone(500,.15,'triangle',.03,-200)}
  if(w.aura){const l=w.aura,R=(ev.aura?95:[38,44,52,58,68][l-1])*SC.area,dmg=ev.aura?16:[4,5,7,8,10][l-1];G.auraR=R;G.auraT-=dt;if(G.auraT<=0){G.auraT=.5;for(const e of G.en)if(!e.dead&&d2(e,p)<(R+e.r)**2)hurtEnemy(e,dmg,l>=5||ev.aura?50:15,e.x-p.x,e.y-p.y);if(ev.aura)p.hp=Math.min(p.mhp,p.hp+.6)}}else G.auraR=0;
- if(w.boom&&!(G.cd.boom>0)){const l=w.boom,n=ev.boom?6:[1,1,2,2,3][l-1],dmg=ev.boom?26:10+4*l;G.cd.boom=(ev.boom?1.1:1.6)*SC.cd;const t=nearest(p.x,p.y,300),a0=t?Math.atan2(t.y-p.y,t.x-p.x):Math.random()*6.28;
+ if(w.boom&&!(G.cd.boom>0)){const l=w.boom,n=ev.boom?6:[1,1,2,2,3][l-1],dmg=ev.boom?26:10+4*l;G.cd.boom=(ev.boom?1.1:1.6)*SC.cd;const t=nearest(p.x,p.y,150*SC.area),a0=t?Math.atan2(t.y-p.y,t.x-p.x):Math.random()*6.28;
   for(let i=0;i<n;i++){const a=a0+i*6.283/n*(n>1?1:0);G.pr.push({t:'boom',x:p.x,y:p.y,a,vx:Math.cos(a)*240,vy:Math.sin(a)*240,dmg,r:9*SC.area,l:ev.boom?2.2:1.6,age:0,pierce:999,hit:new Set(),rehit:.35})}tone(400,.2,'triangle',.03,300)}
  if(w.zap&&!(G.cd.zap>0)){const l=w.zap,n=ev.zap?10:[2,3,3,4,6][l-1],dmg=ev.zap?40:14+5*l;G.cd.zap=(ev.zap?1.2:2.2)*SC.cd;const vis=G.en.filter(e=>Math.abs(e.x-p.x)<W/Z/2&&Math.abs(e.y-p.y)<H/Z/2);
   for(let i=0;i<n&&vis.length;i++){const e=vis.splice(Math.random()*vis.length|0,1)[0];G.bolts.push({x:e.x,y:e.y,l:.25});hurtEnemy(e,dmg);if(ev.zap)for(const o of G.en)if(!o.dead&&o!==e&&d2(o,e)<40*40)hurtEnemy(o,dmg*.5)}if(n)sfx.zap()}}
