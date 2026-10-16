@@ -475,7 +475,7 @@ const UI=(()=>{const R=document.getElementById('ui'),$=h=>{const d=document.crea
   '<div class="tmenu">'+btn('PLAY','play','primary','wide')+btn(img('heroes')+'HEROES','heroes')+btn(img('shop')+'SHOP','shop')+btn(img('skull')+'BEASTS','best')+btn(img('curse')+'CURSE','curse')+'</div></div>'}
  function sChars(){let h='<div class="scr dark"><div class="hdr"><div class="h1">'+img('crown')+'HEROES</div><div class="pill cs-9 cs-panel"><div class="fill">'+img('coin')+'<span data-b="gold">'+S.gold+'</span></div></div></div><div class="hgrid">';
   CH.forEach((c,i)=>{const own=S.chars.includes(i),sel=S.char===i,can=S.gold>=c.p;
-   h+='<div class="cs-9 hero '+(sel?'cs-panel-gold':'cs-panel')+'" data-a="hero" data-v="'+i+'"><div class="in">'+(sel?img('crown','crown'):'')+
+   h+='<div class="cs-9 hero '+(sel?'cs-panel-gold':'cs-panel')+'" data-a="hero" data-v="'+i+'"><div class="in">'+
     '<div class="port'+(own?'':' locked')+'" style="background:'+c.c+'33">'+spr('hero:'+i,sel?'1':'')+(own?'':'<div class="lock">'+img('lock')+btn(img('coin')+c.p,'hero','price','price',i,!can)+'</div>')+(sel?'<div class="ribbon cs-9 cs-tag-weapon d">SELECTED</div>':'')+'</div>'+
     '<div class="cs-9 cs-btn cs-btn-primary-normal plate d ellip" style="pointer-events:none">'+esc(c.n.toUpperCase())+'</div><div class="role d" style="font-size:8px">'+ROLE[i]+(S.winsBy[i]?' ♛'+S.winsBy[i]:'')+'</div>'+
     '<div class="stat"><div><b>HP '+c.hp+'</b><br><span class="g">'+esc(c.perk)+'</span></div>'+img(wIc(c.w))+'</div></div></div>'});
