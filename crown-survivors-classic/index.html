@@ -421,7 +421,7 @@ function drawTitle(){menuBg();pix('CROWN',W/2,H*.12,46,pal.gold,3,'#e0a526');pix
  const pl=1+Math.sin(clock*5)*.03;x.save();x.translate(W/2,H*.64+29*U);x.scale(pl,pl);x.translate(-W/2,-(H*.64+29*U));button('▶ PLAY',W/2-105*U,H*.64,210*U,58*U,()=>go('chars'),'#c8452f',26);x.restore();
  button('UPGRADES',W/2-105*U,H*.64+70*U,210*U,46*U,()=>go('shop'),'#5fae7a',17);
  txt('Drag to move · auto attack · pick upgrades',W/2,H*.64+136*U,11,pal.paper);
- button(S.muted?'♪×':'♪',W-50*U,12*U+SAT,40*U,34*U,()=>{S.muted=!S.muted;save()},'#8b5a2b',14);
+ button(S.muted?'♪×':'♪',W-50*U,12*U+SAT,40*U,34*U,()=>{S.muted=!S.muted;save()},'#8b5a2b',14);button('⟳',W-38,52*U+SAT,32,30*U,async()=>{toast={t:'Updating...',l:3};try{const rs=await navigator.serviceWorker?.getRegistrations();if(rs)await Promise.all(rs.map(r=>r.unregister()));const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}catch(e){}location.replace(location.pathname+'?v='+Date.now())},'#8b5a2b',14);
  button('RESET',10*U,H-44*U,72*U,30*U,()=>{resetAsk=true},'#6a4a3a',11);
  if(resetAsk){btns.push({x:0,y:0,w:W,h:H,k:'rbg',f:()=>{resetAsk=false}});x.fillStyle='rgba(20,12,5,.8)';x.fillRect(0,0,W,H);const pw=Math.min(W-30*U,330*U),ph=230*U,px=(W-pw)/2,py=(H-ph)/2;rr(px,py+6*U,pw,ph,14*U,'rgba(0,0,0,.4)');rr(px,py,pw,ph,14*U,'#f3e2b8',pal.ink,4);btns.push({x:px,y:py,w:pw,h:ph,k:'rpan',f:()=>{}});
   pix('RESET?',W/2,py+34*U,24,'#c8452f',1);txt('This deletes all gold, upgrades,',W/2,py+76*U,12,pal.ink,'center',false);txt('heroes, curses and records.',W/2,py+96*U,12,pal.ink,'center',false);txt('This cannot be undone.',W/2,py+122*U,11,'#c8452f','center',false);
