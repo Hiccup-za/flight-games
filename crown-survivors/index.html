@@ -111,7 +111,12 @@ function cards(){const out=[],ws=Object.keys(G.w),pss=Object.keys(G.ps);
  if(pss.length<(G.slotP||4))for(const k in PS)if(!G.ps[k])out.push({k,kind:'p',lv:1,wt:1.5});
  const n=3+M.choice,pick=[];const ev=out.filter(o=>o.kind==='e');if(ev.length)pick.push(ev[0]);
  let pool=out.filter(o=>!pick.includes(o));while(pick.length<n&&pool.length){let s=pool.reduce((a,o)=>a+o.wt,0),r=Math.random()*s;for(const o of pool){r-=o.wt;if(r<=0){pick.push(o);pool=pool.filter(q=>q!==o);break}}}
- if(pick.length<n){const ik=Object.keys(INF);const wt=k=>(((G.inf||{})[k]||0)>=INF[k].cap?.35:1);while(pick.length<n&&ik.length){let sum=ik.reduce((a,k)=>a+wt(k),0),r=Math.random()*sum,j=0;for(;j<ik.length-1;j++){r-=wt(ik[j]);if(r<=0)break}pick.push({k:ik[j],kind:'i'});ik.splice(j,1)}}
+ if(pick.length<n){const hpf=G.p.hp/G.p.mhp,fw=hpf<.3?4:hpf<.6?2:.7,iw=k=>(((G.inf||{})[k]||0)>=INF[k].cap?.35:1);
+  // mixed fill pool: endless upgrades + Coin Sack + Royal Feast (Feast weighted by missing HP)
+  let mix=Object.keys(INF).map(k=>({o:{k,kind:'i'},w:iw(k)})).concat([{o:{k:'gold',kind:'x'},w:.8},{o:{k:'heal',kind:'x'},w:fw}]);
+  const draw=list=>{let sum=list.reduce((a,q)=>a+q.w,0),r=Math.random()*sum;for(const q of list){r-=q.w;if(r<=0)return q}return list[list.length-1]};
+  if(Math.random()<.8){const q=draw(mix.filter(q=>q.o.kind==='x'));pick.push(q.o);mix=mix.filter(m=>m!==q)}
+  while(pick.length<n&&mix.length){const q=draw(mix);pick.push(q.o);mix=mix.filter(m=>m!==q)}}
  return pick}
 function openChoice(src){G.choice={cards:cards(),t:0,src};sfx.lvl();vib([20,30,20])}
 function choose(c){if(c.kind==='i'){G.inf=G.inf||{};G.inf[c.k]=(G.inf[c.k]||0)+1;if(c.k==='hp'){const v=(G.inf.hp>INF.hp.cap?6:12);G.p.mhp+=v;G.p.hp=Math.min(G.p.mhp,G.p.hp+20+v)}}else if(c.kind==='w')G.w[c.k]=c.lv;else if(c.kind==='p'){G.ps[c.k]=c.lv;if(c.k==='heart'){G.p.mhp+=20;G.p.hp=Math.min(G.p.mhp,G.p.hp+30)}}else if(c.kind==='e'){G.evo[c.k]=1;banner('EVOLVED: '+WP[c.k].e+'!','#ffd23f');shake=8}
@@ -439,7 +444,7 @@ function draw(){btns=[];if(scene==='play'&&G){SC=SC||st();drawWorld();drawHud()}
  for(const q of uiParts){x.globalAlpha=Math.min(1,q.l*2);x.fillStyle=q.c;x.fillRect(q.x,q.y,5*U,5*U)}x.globalAlpha=1;
  if(toast)txt(toast.t,W/2,H*.5,16,pal.paper);if(trans){const a=trans.t<.22?trans.t/.22:1-(trans.t-.22)/.22;x.fillStyle='rgba(30,20,10,'+Math.max(0,a)+')';x.fillRect(0,0,W,H)}}
 function loop(t){const dt=Math.max(0,Math.min(.05,(t-t0)/1000));t0=t;for(let i=0;i<speedMul;i++)update(dt);draw();requestAnimationFrame(loop)}requestAnimationFrame(loop);
-window.__cs={cards:()=>cards(),INF,get resetAsk(){return resetAsk},get btns(){return btns},BOSS,spawnBoss:i=>{G.bossI=i+1;spawnBoss(i)},setPhase:n=>{G.phase=n},setT:t=>{G.t=t},get G(){return G},get S(){return S},get scene(){return scene},start:()=>{scene='play';startRun()},auto:(on=true)=>{G.auto=on},god:(on=true)=>{G.god=on},speed:n=>speedMul=n,go:s=>{scene=s},
+window.__cs={setHp:f=>{G.p.hp=G.p.mhp*f},cards:()=>cards(),INF,get resetAsk(){return resetAsk},get btns(){return btns},BOSS,spawnBoss:i=>{G.bossI=i+1;spawnBoss(i)},setPhase:n=>{G.phase=n},setT:t=>{G.t=t},get G(){return G},get S(){return S},get scene(){return scene},start:()=>{scene='play';startRun()},auto:(on=true)=>{G.auto=on},god:(on=true)=>{G.god=on},speed:n=>speedMul=n,go:s=>{scene=s},
  pickAuto:()=>{if(G&&G.choice){const c=G.choice;c.t=1;const cs=c.cards;const e=cs.find(q=>q.kind==='e')||cs.find(q=>q.kind==='w'&&q.lv>1)||cs[Math.random()*cs.length|0];choose(e);return true}return false},addGold:n=>{S.gold+=n;save()}};
 })();
 </script><script>if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('../sw.js',{scope:'../'}).catch(()=>{});</script></body></html>
