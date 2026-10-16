@@ -1,0 +1,60 @@
+/* Crown Survivors — Royal Pixel tokens. Art: 1 art px = 2 CSS px. Images: @3x files; slice = inset*3, border-width = inset*2px. */
+:root{
+  --cs-bg: #14161c;
+  --cs-panel: #1f232b;
+  --cs-panel-light: #2a2f39;
+  --cs-border: #3a404c;
+  --cs-gold: #f2b632;
+  --cs-gold-dark: #b07a12;
+  --cs-gold-light: #ffe08a;
+  --cs-ruby: #b3202a;
+  --cs-ruby-dark: #6e0f16;
+  --cs-ruby-light: #e0434d;
+  --cs-disabled: #4a4f59;
+  --cs-text: #f3ecd9;
+  --cs-passive: #2f4a7a;
+  --cs-outline: #0b0c10;
+  --cs-space-4: 4px;
+  --cs-space-8: 8px;
+  --cs-space-12: 12px;
+  --cs-space-16: 16px;
+  --cs-space-24: 24px;
+  --cs-space-32: 32px;
+  --cs-radius: 0;
+  --cs-art-px: 2px;
+}
+
+.cs-9{box-sizing:border-box;border-style:solid;border-radius:0;image-rendering:pixelated;background:none;color:var(--cs-text);}
+.cs-panel{border-width:24px;border-image:url("panel@3x.png") 36 fill / 24px stretch;min-width:48px;min-height:48px;}
+.cs-panel-gold{border-width:24px;border-image:url("panel-gold@3x.png") 36 fill / 24px stretch;min-width:48px;min-height:48px;}
+.cs-btn-primary-normal{border-width:24px;border-image:url("btn-primary-normal@3x.png") 36 fill / 24px stretch;min-width:48px;min-height:48px;}
+.cs-btn-primary-pressed{border-width:24px;border-image:url("btn-primary-pressed@3x.png") 36 fill / 24px stretch;min-width:48px;min-height:48px;}
+.cs-btn-primary-disabled{border-width:24px;border-image:url("btn-primary-disabled@3x.png") 36 fill / 24px stretch;min-width:48px;min-height:48px;}
+.cs-btn-secondary-normal{border-width:24px;border-image:url("btn-secondary-normal@3x.png") 36 fill / 24px stretch;min-width:48px;min-height:48px;}
+.cs-btn-secondary-pressed{border-width:24px;border-image:url("btn-secondary-pressed@3x.png") 36 fill / 24px stretch;min-width:48px;min-height:48px;}
+.cs-btn-secondary-disabled{border-width:24px;border-image:url("btn-secondary-disabled@3x.png") 36 fill / 24px stretch;min-width:48px;min-height:48px;}
+.cs-btn-price-normal{border-width:24px;border-image:url("btn-price-normal@3x.png") 36 fill / 24px stretch;min-width:48px;min-height:48px;}
+.cs-btn-price-pressed{border-width:24px;border-image:url("btn-price-pressed@3x.png") 36 fill / 24px stretch;min-width:48px;min-height:48px;}
+.cs-btn-price-disabled{border-width:24px;border-image:url("btn-price-disabled@3x.png") 36 fill / 24px stretch;min-width:48px;min-height:48px;}
+.cs-card-frame{border-width:28px;border-image:url("card-frame@3x.png") 42 fill / 28px stretch;min-width:56px;min-height:56px;}
+.cs-card-frame-selected{border-width:34px;border-image:url("card-frame-selected@3x.png") 51 fill / 34px stretch;min-width:68px;min-height:68px;}
+.cs-boss-frame{border-width:32px;border-image:url("boss-frame@3x.png") 48 / 32px stretch;min-width:64px;min-height:64px;}
+.cs-boss-gem{display:inline-block;width:44px;height:36px;background:url("boss-gem@3x.png") center/100% 100% no-repeat;image-rendering:pixelated;}
+.cs-tag-weapon{border-width:10px;border-image:url("tag-weapon@3x.png") 15 fill / 10px stretch;min-width:20px;min-height:20px;}
+.cs-tag-passive{border-width:10px;border-image:url("tag-passive@3x.png") 15 fill / 10px stretch;min-width:20px;min-height:20px;}
+.cs-pip-on{display:inline-block;width:20px;height:20px;background:url("pip-on@3x.png") center/100% 100% no-repeat;image-rendering:pixelated;}
+.cs-pip-off{display:inline-block;width:20px;height:20px;background:url("pip-off@3x.png") center/100% 100% no-repeat;image-rendering:pixelated;}
+.cs-hp-bar-frame{border-width:8px;border-image:url("hp-bar-frame@3x.png") 12 / 8px stretch;min-width:16px;min-height:16px;}
+.cs-hp-bar-fill{background:url("hp-bar-fill@3x.png") center/100% 100% no-repeat;image-rendering:pixelated;border:0;}
+
+/* buttons: one class per state; label vertically centred above the lip, pressed moves label down 4px (2 art px) */
+.cs-btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:0 0 6px;font:700 18px/1 "Press Start 2P",monospace;color:var(--cs-text);text-shadow:0 2px 0 var(--cs-outline);user-select:none;}
+.cs-btn:active:not([disabled]), .cs-btn.is-pressed{padding:4px 0 0;}
+.cs-btn-price-normal,.cs-btn-price-pressed{color:#3a2608;text-shadow:0 2px 0 var(--cs-gold-light);}
+.cs-btn-disabled{color:#8a8f99;text-shadow:none;}
+/* the gem: absolutely centred on the top edge of a boss frame */
+.cs-boss{position:relative;}
+.cs-boss::before{content:"";position:absolute;left:50%;top:0;width:44px;height:36px;transform:translate(-50%,calc(-50% - 16px));background:url("boss-gem@3x.png") center/100% 100% no-repeat;image-rendering:pixelated;}
+.cs-hp{display:block;position:relative;}
+.cs-hp > .cs-hp-bar-fill{position:absolute;left:0;top:0;bottom:0;}
+.cs-icon{image-rendering:pixelated;width:24px;height:24px;} .cs-icon-32{width:32px;height:32px;} .cs-icon-48{width:48px;height:48px;}
