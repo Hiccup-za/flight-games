@@ -439,7 +439,7 @@ function draw(){btns=[];if(scene==='play'&&G){SC=SC||st();drawWorld();drawHud()}
 function loop(t){const dt=Math.max(0,Math.min(.05,(t-t0)/1000));t0=t;for(let i=0;i<speedMul;i++)update(dt);draw();requestAnimationFrame(loop)}requestAnimationFrame(loop);
 // ===== Royal Pixel DOM UI =====
 const UI=(()=>{const R=document.getElementById('ui'),$=h=>{const d=document.createElement('div');d.innerHTML=h;return d.firstElementChild};
- const WI={bolt:'scepter-bolt',orb:'orbit-coins',rain:'gold-rain',aura:'royal-aura',boom:'crown-boomerang',zap:'thunder-block'},PI={might:'royal-edge',tome:'tome',magnet:'magnet',armor:'armor',boots:'boots',luck:'luck',heart:'heart'};
+ const WI={bolt:'scepter-bolt',orb:'orbit-coins',rain:'gold-rain',aura:'royal-aura',boom:'crown-boomerang',zap:'thunder-block'},PI={might:'royal-edge',tome:'tome',magnet:'magnet',armor:'armor',boots:'boots',luck:'luck',heart:'heart',area:'area'};
  const MI={might:'royal-edge',hp:'heart',armor:'armor',speed:'boots',magnet:'magnet',greed:'coin',reroll:'reset',choice:'tome',revive:'crown'};
  let AREA='';{const c=document.createElement('canvas');c.width=c.height=24;const q=c.getContext('2d');const px=(a,b,w,h,col)=>{q.fillStyle=col;q.fillRect(a,b,w,h)};
   px(2,2,20,20,'#0b0c10');px(4,4,16,16,'#ffb13d');px(6,6,12,12,'#0b0c10');px(8,8,8,8,'#f2b632');px(10,10,4,4,'#fff3c4');px(4,4,16,2,'#ffe08a');AREA=c.toDataURL()}
@@ -451,7 +451,7 @@ const UI=(()=>{const R=document.getElementById('ui'),$=h=>{const d=document.crea
  const tm=s=>Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');
  const btn=(lbl,act,kind='secondary',cls='',arg='',dis=false)=>'<button class="cs-9 cs-btn cs-btn-'+kind+'-'+(dis?'disabled cs-btn-disabled':'normal')+' btn '+cls+'" data-a="'+act+'" data-v="'+arg+'"'+(dis?' disabled':'')+'>'+lbl+'</button>';
  const nine=(cls,inner,extra='',attrs='')=>'<div class="cs-9 '+cls+' '+extra+'" '+attrs+'><div class="in">'+inner+'</div></div>';
- const PWID={king_cube:132,mint_mage:140,ruby_knight:144,shadow_rogue:136},por=(i,d)=>{const n=HEN[i];return '<img class="por" src="en/p-'+n+'@4x.png" style="width:'+PWID[n]/d+'px;height:'+PWID[n]/d+'px" alt="">'};const spr=(k,a)=>'<canvas class="spr" data-k="'+k+'" data-a="'+(a||'')+'"></canvas>';
+ const PWID={king_cube:160,mint_mage:160,ruby_knight:160,shadow_rogue:160},por=(i,d)=>{const n=HEN[i];return '<img class="por" src="en/p-'+n+'@4x.png" style="width:'+PWID[n]/d+'px;height:'+PWID[n]/d+'px" alt="">'};const spr=(k,a)=>'<canvas class="spr" data-k="'+k+'" data-a="'+(a||'')+'"></canvas>';
  const ROLE=['RULER','DEFENDER','CASTER','ASSASSIN'],WORLD={blob:0,bat:0,skel:0,ghost:1,imp:1,vine:3,frog:3,wisp:4,harpy:4},WN=['SAND','NIGHT','LAVA','JUNGLE','CLOUD'],WC=['#e6c48a','#8f88c0','#ff6a1a','#6fbf5a','#cfe6ff'];
  let modal=null,key='',bound=[],toastEl,fadeEl,host;
  const A={play:()=>{if(!S.chars.includes(S.char))S.char=0;go('play',startRun)},heroes:()=>go('chars'),shop:()=>go('shop'),best:()=>go('bestiary'),title:()=>go('title'),start:()=>go('play',startRun),
