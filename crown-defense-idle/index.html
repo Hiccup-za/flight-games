@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<!DOCTYPE html><html lang="en" data-game="Crown Defense Idle"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Crown Defense">
@@ -152,7 +152,7 @@ function drawTitle(){menuBg();pix('CROWN',W/2,H*.11,46,pal.gold,3,'#e0a526');pix
  for(let i=0;i<3;i++){const a=clock*3+i*2.09;coinI(W/2+Math.cos(a)*72*U,H*.45+Math.sin(a)*72*U,7)}
  rr(W/2-80*U,H*.58,160*U,30*U,10*U,'rgba(30,20,10,.95)',pal.ink,2);coinI(W/2-58*U,H*.58+15*U,8);txt(fmt(S.gold),W/2+8*U,H*.58+15*U,17,pal.gold);
  txt('Best wave '+S.maxWave+'  ·  Gems '+S.gems,W/2,H*.58+46*U,12,pal.paper);
- const pl=1+Math.sin(clock*5)*.03;x.save();x.translate(W/2,H*.68+29*U);x.scale(pl,pl);x.translate(-W/2,-(H*.68+29*U));button('▶ PLAY',W/2-105*U,H*.68,210*U,58*U,()=>{scene='play';G=null;newWave();G.start=clock;sfx.pick()},'#c8452f',26);x.restore();
+ const pl=1+Math.sin(clock*5)*.03;x.save();x.translate(W/2,H*.68+29*U);x.scale(pl,pl);x.translate(-W/2,-(H*.68+29*U));button('▶ PLAY',W/2-105*U,H*.68,210*U,58*U,()=>{if(window.flightTrackGameStarted)flightTrackGameStarted();scene='play';G=null;newWave();G.start=clock;sfx.pick()},'#c8452f',26);x.restore();
  txt('The King fights on his own · buy upgrades',W/2,H*.68+82*U,11,pal.paper);txt('earns gold while you are away',W/2,H*.68+100*U,11,pal.paper);bottomRow()}
 function drawBoard(){const ph=PHASE[Math.floor((S.wave-1)/10)%PHASE.length];x.save();x.beginPath();x.rect(0,TOP-4*U,W,PT-TOP+8*U);x.clip();x.fillStyle=ph.g;x.fillRect(0,0,W,H);const T=32*BK;for(let i=-1;i<W/T+1;i++)for(let j=-1;j<H/T+1;j++)if((i+j)&1){x.fillStyle=ph.g2;x.fillRect(BX+(i-Math.floor(W/T/2))*T-T/2,BY+(j-Math.floor(H/T/2))*T-T/2,T,T)}
  const sx=shake?(Math.random()-.5)*shake:0;x.translate(BX+sx,BY);x.scale(BK,BK);const s=st(),g=G;
@@ -192,4 +192,12 @@ offline();if(away){scene='play';newWave();G.start=clock}
 setInterval(save,5000);addEventListener('visibilitychange',()=>{if(document.hidden)save()});addEventListener('pagehide',save);
 function loop(t){const dt=Math.max(0,Math.min(.05,(t-t0)/1000));t0=t;update(dt);draw();requestAnimationFrame(loop)}requestAnimationFrame(loop);
 })();
-</script><script>if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('../sw.js',{scope:'../'}).catch(()=>{});</script></body></html>
+</script><script
+  src="https://cdn.databuddy.cc/databuddy.js"
+  data-client-id="543a7cb0-3979-4000-a209-45af7ac28f26"
+  data-track-web-vitals
+  data-track-errors
+  data-track-outgoing-links
+  crossorigin="anonymous"
+  async
+></script><script src="../analytics.js"></script><script>if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('../sw.js',{scope:'../'}).catch(()=>{});</script></body></html>

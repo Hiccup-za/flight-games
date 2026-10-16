@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<!DOCTYPE html><html lang="en" data-game="Coin Dash"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Coin Dash">
@@ -69,7 +69,7 @@ let scene='title',G=null,shake=0,parts=[],floats=[],btns=[],t0=performance.now()
 const GROUND=()=>H*0.78;
 const curTheme=()=>!G?0:G.mode==='endless'?Math.floor(G.dist/800)%3:LV[G.li].th;
 function go(s,fn){if(trans)return;trans={t:0,to:s,fn};sfx.whoosh()}
-function startRun(mode,li){au();const lv=mode==='lvl'?LV[li]:null;G={mode,li,lv,x:0,spd:lv?lv.s0:260,vy:0,py:0,ground:true,jumps:0,hold:0,dist:0,coins:0,combo:0,comboT:0,maxCombo:0,blocks:0,stomps:0,hits:0,
+function startRun(mode,li){au();if(window.flightTrackGameStarted)flightTrackGameStarted({mode:mode});const lv=mode==='lvl'?LV[li]:null;G={mode,li,lv,x:0,spd:lv?lv.s0:260,vy:0,py:0,ground:true,jumps:0,hold:0,dist:0,coins:0,combo:0,comboT:0,maxCombo:0,blocks:0,stomps:0,hits:0,
  obs:[],cns:[],qbs:[],shots:[],nextO:lv?700:500,nextC:200,nextQ:700,shield:S.up.shield>0?1:0,hearts:lv?3:1,inv:0,mag:0,dbl:0,star:0,dead:false,deadT:0,paused:false,sq:1,coinBump:0,
  tut:mode==='lvl'&&li===0&&!S.tut?{step:0,t:0}:null,boss:null,finished:false,finT:0,intro:lv?2:0,god:false,auto:false};
  if(G.tut)G.nextO=1100;S.stats.runs++;mstep=0}
@@ -316,4 +316,12 @@ function loop(t){const dt=Math.min(.05,(t-t0)/1000);t0=t;for(let i=0;i<speedMul;
 requestAnimationFrame(loop);
 window.__cd={start:(m,i)=>{scene='play';startRun(m,i)},get G(){return G},get scene(){return scene},get S(){return S},go:s=>{scene=s},cheat:(on=true)=>{G.god=on;G.auto=on},speed:n=>speedMul=n,skip:m=>{G.dist=m}};
 })();
-</script><script>if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('../sw.js',{scope:'../'}).catch(()=>{});</script></body></html>
+</script><script
+  src="https://cdn.databuddy.cc/databuddy.js"
+  data-client-id="543a7cb0-3979-4000-a209-45af7ac28f26"
+  data-track-web-vitals
+  data-track-errors
+  data-track-outgoing-links
+  crossorigin="anonymous"
+  async
+></script><script src="../analytics.js"></script><script>if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('../sw.js',{scope:'../'}).catch(()=>{});</script></body></html>

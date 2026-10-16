@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<!DOCTYPE html><html lang="en" data-game="Crown Survivors"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Crown Survivors">
@@ -71,7 +71,7 @@ const joy={on:false,ox:0,oy:0,x:0,y:0,id:null},keys={};
 function go(s,fn){if(trans)return;trans={t:0,to:s,fn};tone(900,.2,'triangle',.04,-600)}
 let M=S.meta,resetAsk=false;
 function resetProgress(){try{localStorage.removeItem(KEY)}catch(e){}S=JSON.parse(JSON.stringify(DEF));M=S.meta;G=null;SC=null;resetAsk=false;scene='title';toast={t:'Progress reset',l:1.6};vib(30)}
-function startRun(){au();const c=CH[S.char];const mhp=c.hp+M.hp*10;
+function startRun(){au();if(window.flightTrackGameStarted)flightTrackGameStarted();const c=CH[S.char];const mhp=c.hp+M.hp*10;
  G={t:0,p:{x:0,y:0,hp:mhp,mhp,inv:0,face:1,vx:0,vy:0,walk:0},en:[],pr:[],pools:[],eb:[],gems:[],fx:[],dn:[],bolts:[],lvl:1,xp:0,kills:0,gold:0,
   w:{},ps:{},evo:{},cd:{},choice:null,queue:0,spawnAcc:0,phase:0,bossI:0,boss:null,eliteT:45,paused:false,over:null,rerolls:M.reroll,revive:M.revive,
   tut:!S.tut?{step:0,t:0}:null,flash:0,gemChain:0,gemT:0,orbA:0,auto:false,god:false,curse:S.curse,auraT:0,char:S.char,dmgDealt:0,tele:[]};
@@ -545,4 +545,12 @@ const UI=(()=>{const R=document.getElementById('ui'),$=h=>{const d=document.crea
 window.__cs={ui:UI,openChoice:src=>openChoice(src||'lvl'),setHp:f=>{G.p.hp=G.p.mhp*f},cards:()=>cards(),INF,get resetAsk(){return resetAsk},get btns(){return btns},BOSS,spawnBoss:i=>{G.bossI=i+1;spawnBoss(i)},setPhase:n=>{G.phase=n},setT:t=>{G.t=t},get G(){return G},get S(){return S},get scene(){return scene},start:()=>{scene='play';startRun()},auto:(on=true)=>{G.auto=on},god:(on=true)=>{G.god=on},speed:n=>speedMul=n,go:s=>{scene=s},
  pickAuto:()=>{if(G&&G.choice){const c=G.choice;c.t=1;const cs=c.cards;const e=cs.find(q=>q.kind==='e')||cs.find(q=>q.kind==='w'&&q.lv>1)||cs[Math.random()*cs.length|0];choose(e);return true}return false},addGold:n=>{S.gold+=n;save()}};
 })();
-</script><script>if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('../sw.js',{scope:'../'}).catch(()=>{});</script></body></html>
+</script><script
+  src="https://cdn.databuddy.cc/databuddy.js"
+  data-client-id="543a7cb0-3979-4000-a209-45af7ac28f26"
+  data-track-web-vitals
+  data-track-errors
+  data-track-outgoing-links
+  crossorigin="anonymous"
+  async
+></script><script src="../analytics.js"></script><script>if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('../sw.js',{scope:'../'}).catch(()=>{});</script></body></html>
