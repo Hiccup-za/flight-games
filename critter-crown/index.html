@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<!DOCTYPE html><html lang="en" data-game="Critter Crown"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Critter Crown">
@@ -391,7 +391,7 @@ function enemyTeam(st){const R=srand(st.i*131+17),out=[];const c=st.c;const favE
   out.push({c:cd,lvl:Math.max(1,Math.round(st.lvl+(k===2&&st.boss?1:0)))})}return out}
 // ===== battle engine =====
 function mkUnit(c,lvl,side,i){const s=statsOf(c,lvl);return{c,lvl,side,i,hp:s.hp,mhp:s.hp,dhp:s.hp,atk:s.atk,cd:1,burn:0,stun:0,shield:0,weak:0,alive:true,acted:false,anim:0,hitT:0,ox:0,oy:0}}
-function startBattle(si){ensureTeam();const st=STAGES[si];B={st,a:S.team.slice(0,3).map((id,i)=>mkUnit(CARDS[id],lvlOf(id),'a',i)),b:enemyTeam(st).map((q,i)=>mkUnit(q.c,q.lvl,'b',i)),phase:'p',round:1,q:[],cur:null,sel:null,mode:null,over:null,auto:false,t:0,log:'',dn:[],intro:1.6,tut:S.onb<2&&si===0?{step:0}:null,stats:{sup:0,ab:0}};
+function startBattle(si){if(window.flightTrackGameStarted)flightTrackGameStarted({stage:si});ensureTeam();const st=STAGES[si];B={st,a:S.team.slice(0,3).map((id,i)=>mkUnit(CARDS[id],lvlOf(id),'a',i)),b:enemyTeam(st).map((q,i)=>mkUnit(q.c,q.lvl,'b',i)),phase:'p',round:1,q:[],cur:null,sel:null,mode:null,over:null,auto:false,t:0,log:'',dn:[],intro:1.6,tut:S.onb<2&&si===0?{step:0}:null,stats:{sup:0,ab:0}};
  S.stats.battles++;save();startPhase('a')}
 function sideOf(s){return s==='a'?B.a:B.b}
 function startPhase(side){B.phase=side==='a'?'p':'e';for(const u of sideOf(side)){if(!u.alive)continue;u.acted=false;if(u.burn>0){const d=Math.max(1,Math.round(u.mhp*.07));u.hp=Math.max(0,u.hp-d);u.burn--;dnum(u,d,'#ff8a3d','🔥');if(u.hp<=0)faint(u)}if(u.stun>0){u.stun--;u.acted=true;u.stunned=true}else u.stunned=false;if(u.weak>0)u.weak--;u.cd=Math.max(0,u.cd-1)}
@@ -805,4 +805,12 @@ window.__cc={stageModal:i=>{modal={t:'stage',i}},CARD,UIART,drawCardFace,trainer
  setDetail:id=>{detail={c:CARDS[id],t:1};tilt={x:.5,y:.2,src:'drag'};scene='detail'},buy:i=>{const pk=PACKS[i];if(S.coins<pk.price)return null;S.coins-=pk.price;return rollPack(pk)},upgradeTeam:()=>{let n=0;for(const id of S.team){const c=CARDS[id],cd=S.cards[id];while(cd.lvl<10&&S.dust>=upCost(c,cd.lvl)){S.dust-=upCost(c,cd.lvl);cd.lvl++;n++}}cardCache.clear();save();return n},
  bestTeam:()=>{S.team=bestTeam();save()},modal:i=>{modal={t:'stage',i}},get modal(){return modal},get btns(){return btns},resetProgress,openReset:()=>{modal={t:'reset'}},cancelReset:()=>{modal=null},scroll:(s,v)=>{scr[s]=v}};
 })();
-</script><script>if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('../sw.js',{scope:'../'}).catch(()=>{});</script></body></html>
+</script><script
+  src="https://cdn.databuddy.cc/databuddy.js"
+  data-client-id="543a7cb0-3979-4000-a209-45af7ac28f26"
+  data-track-web-vitals
+  data-track-errors
+  data-track-outgoing-links
+  crossorigin="anonymous"
+  async
+></script><script src="../analytics.js"></script><script>if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('../sw.js',{scope:'../'}).catch(()=>{});</script></body></html>
